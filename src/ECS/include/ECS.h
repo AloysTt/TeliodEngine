@@ -58,15 +58,17 @@ namespace teliod::ecs
 		void entityDestroyed(Entity entity) override;
 
 	private:
-		T mComponentArray[MAX_ENTITIES];
-		size_t mEntityToIndexMap[MAX_ENTITIES];
-		Entity mIndexToEntityMap[MAX_ENTITIES];
-		size_t mSize;
+		using IndexType = Entity;
 
+
+		T mComponentArray[MAX_ENTITIES];
+		IndexType mEntityToIndexMap[MAX_ENTITIES];
+		Entity mIndexToEntityMap[MAX_ENTITIES];
+		Entity mSize;
 
 		// static
-		static constexpr size_t INVALID_INDEX = -1;
-		static constexpr Entity INVALID_ENTITY = -1;
+		static constexpr IndexType INVALID_INDEX = UINT32_MAX;
+		static constexpr Entity INVALID_ENTITY = UINT32_MAX;
 	};
 
 

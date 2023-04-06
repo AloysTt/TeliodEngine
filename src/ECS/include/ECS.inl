@@ -14,7 +14,7 @@ namespace teliod::ecs
 	mIndexToEntityMap(),
 	mSize(0)
 	{
-		std::memset(mEntityToIndexMap, INVALID_INDEX, sizeof(size_t)*MAX_ENTITIES);
+		std::memset(mEntityToIndexMap, INVALID_INDEX, sizeof(IndexType)*MAX_ENTITIES);
 		std::memset(mIndexToEntityMap, INVALID_ENTITY, sizeof(Entity)*MAX_ENTITIES);
 	}
 
@@ -26,7 +26,7 @@ namespace teliod::ecs
 						 entity) == mEntityToIndexMap+MAX_ENTITIES
 						 && "Component added to same entity more than once.");
 
-		size_t newIndex = mSize;
+		IndexType newIndex = mSize;
 		mEntityToIndexMap[entity] = newIndex;
 		mIndexToEntityMap[newIndex] = entity;
 		mComponentArray[newIndex] = component;
@@ -41,8 +41,8 @@ namespace teliod::ecs
 						 entity) != mEntityToIndexMap+MAX_ENTITIES
 						 && "Removing non-existent component.");
 
-		size_t indexOfRemovedEntity = mEntityToIndexMap[entity];
-		size_t indexOfLastElement = mSize - 1;
+		IndexType indexOfRemovedEntity = mEntityToIndexMap[entity];
+		IndexType indexOfLastElement = mSize - 1;
 		mComponentArray[indexOfRemovedEntity] = mComponentArray[indexOfLastElement];
 
 		Entity entityOfLastElement = mIndexToEntityMap[indexOfLastElement];
@@ -113,13 +113,13 @@ namespace teliod::ecs
 	{
 		const char* typeName = typeid(T).name();
 		assert(mComponentTypes.find(typeName) != mComponentTypes.end() && "Component not registered before use.");
-		return mComponentArrays[typeName];
+		return static_cast<ComponentArray<T> *>(mComponentArrays[typeName]);
 	}
 
 	template <typename T>
 	void ComponentManager::addComponent(Entity entity, const T &component)
 	{
-		GetComponentArray<T>()->insertData(entity, component);
+		getComponentArray<T>()->insertData(entity, component);
 	}
 
 	template <typename T>
@@ -149,6 +149,7 @@ namespace teliod::ecs
 		}
 	}
 
+
 	//
 	// Definitions for systems
 
@@ -170,7 +171,7 @@ namespace teliod::ecs
 
 		System * system = new T;
 		mSystems.insert({typeName, system});
-		return system;
+		return static_cast<T*>(system);
 	}
 
 	template <typename T>
@@ -214,8 +215,6 @@ namespace teliod::ecs
 
 	//
 	// Definitions for World
-
-
 
 	inline /*static*/ World &World::getInstance()
 	{

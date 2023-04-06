@@ -4,11 +4,10 @@
 
 namespace teliod::ecs
 {
-
 	EntityManager::EntityManager()
 	: mAvailableEntities(),
 	mSignatures(),
-	mLivingEntitiesCount(0)
+	mLivingEntitiesCount(0ull)
 	{
 		for (Entity e=0; e<MAX_ENTITIES; ++e)
 			mAvailableEntities.push(e);

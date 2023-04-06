@@ -1,6 +1,4 @@
-#include <ECS.h>
-
-int main(int egc, char **argv)
+int main(int argc, char **argv)
 {
 	return 0;
 }
