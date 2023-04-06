@@ -1,5 +1,7 @@
 #include <cassert>
 #include <typeinfo>
+#include "ECS.h"
+
 
 namespace teliod::ecs
 {
@@ -145,5 +147,67 @@ namespace teliod::ecs
 			auto const& component = pair.second;
 			component->entityDestroyed(entity);
 		}
+	}
+
+	//
+	// Definitions for systems
+
+	inline const std::set<Entity> &System::getEntities() const
+	{
+		return mEntities;
+	}
+
+	inline std::set<Entity> &System::getEntities()
+	{
+		return mEntities;
+	}
+
+	template <typename T>
+	T * SystemManager::registerSystem()
+	{
+		const char* typeName = typeid(T).name();
+		assert(mSystems.find(typeName) == mSystems.end() && "Registering system more than once.");
+
+		System * system = new T;
+		mSystems.insert({typeName, system});
+		return system;
+	}
+
+	template <typename T>
+	void SystemManager::setSignature(const Signature & signature)
+	{
+		const char* typeName = typeid(T).name();
+		assert(mSystems.find(typeName) != mSystems.end() && "System used before registered.");
+
+		mSignatures.insert({typeName, signature});
+	}
+
+	inline void SystemManager::entityDestroyed(Entity entity)
+	{
+		for (const auto & pair : mSystems)
+		{
+			pair.second->getEntities().erase(entity);
+		}
+	}
+
+	inline void SystemManager::EntitySignatureChanged(Entity entity, const Signature & entitySignature)
+	{
+		for (auto const& pair : mSystems)
+		{
+			const char * type = pair.first;
+			System * system = pair.second;
+			const Signature & systemSignature = mSignatures[type];
+
+			if ((entitySignature & systemSignature) == systemSignature)
+			{
+				system->getEntities().insert(entity);
+			}
+				// Entity signature does not match system signature - erase from set
+			else
+			{
+				system->getEntities().erase(entity);
+			}
+		}
+
 	}
 }

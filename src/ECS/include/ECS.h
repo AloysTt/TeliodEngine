@@ -5,6 +5,7 @@
 #include <bitset>
 #include <queue>
 #include <unordered_map>
+#include <set>
 
 namespace teliod::ecs
 {
@@ -100,6 +101,34 @@ namespace teliod::ecs
 
 		template <typename T>
 		ComponentArray<T> * getComponentArray();
+	};
+
+
+	class System
+	{
+	public:
+		inline const std::set<Entity> & getEntities() const;
+		inline std::set<Entity> & getEntities();
+	private:
+		std::set<Entity> mEntities;
+	};
+
+	class SystemManager
+	{
+	public:
+		template <typename T>
+		T * registerSystem();
+
+		template <typename T>
+		void setSignature(const Signature & signature);
+
+		inline void entityDestroyed(Entity entity);
+
+		inline void EntitySignatureChanged(Entity entity, const Signature & entitySignature);
+
+	private:
+		std::unordered_map<const char *, Signature> mSignatures{};
+		std::unordered_map<const char *, System *> mSystems{};
 	};
 }
 
