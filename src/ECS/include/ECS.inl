@@ -190,7 +190,7 @@ namespace teliod::ecs
 		}
 	}
 
-	inline void SystemManager::EntitySignatureChanged(Entity entity, const Signature & entitySignature)
+	inline void SystemManager::entitySignatureChanged(Entity entity, const Signature & entitySignature)
 	{
 		for (auto const& pair : mSystems)
 		{
@@ -209,5 +209,89 @@ namespace teliod::ecs
 			}
 		}
 
+	}
+
+
+	//
+	// Definitions for World
+
+
+
+	inline /*static*/ World &World::getInstance()
+	{
+		static World w;
+		return w;
+	}
+
+	inline Entity World::createEntity()
+	{
+		return mEntityManager.createEntity();
+	}
+
+	inline void World::destroyEntity(Entity entity)
+	{
+		mEntityManager.destroyEntity(entity);
+		mComponentManager.entityDestroyed(entity);
+		mSystemManager.entityDestroyed(entity);
+	}
+
+	template <typename T>
+	void World::registerComponent()
+	{
+		mComponentManager.registerComponent<T>();
+	}
+
+	template <typename T>
+	void World::addComponent(Entity entity, const T &component)
+	{
+		mComponentManager.addComponent<T>(entity, component);
+
+		Signature signature = mEntityManager.getSignature(entity);
+		signature.set(mComponentManager.getComponentType<T>(), true);
+		mEntityManager.setSignature(entity, signature);
+
+		mSystemManager.entitySignatureChanged(entity, signature);
+	}
+
+	template <typename T>
+	void World::removeComponent(Entity entity)
+	{
+		mComponentManager.removeComponent<T>(entity);
+
+		Signature signature = mEntityManager.getSignature(entity);
+		signature.set(mComponentManager.getComponentType<T>(), false);
+		mEntityManager.setSignature(entity, signature);
+
+		mSystemManager.entitySignatureChanged(entity, signature);
+	}
+
+	template <typename T>
+	const T & World::getComponent(Entity entity) const
+	{
+		return mComponentManager.getComponent<T>(entity);
+	}
+
+	template <typename T>
+	T & World::getComponent(Entity entity)
+	{
+		return mComponentManager.getComponent<T>(entity);
+	}
+
+	template <typename T>
+	ComponentType World::getComponentType()
+	{
+		return mComponentManager.getComponentType<T>();
+	}
+
+	template <typename T>
+	T * World::registerSystem()
+	{
+		return mSystemManager.registerSystem<T>();
+	}
+
+	template <typename T>
+	void World::setSystemSignature(const Signature &signature)
+	{
+		mSystemManager.setSignature<T>(signature);
 	}
 }

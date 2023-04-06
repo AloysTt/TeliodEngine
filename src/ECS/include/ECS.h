@@ -124,11 +124,58 @@ namespace teliod::ecs
 
 		inline void entityDestroyed(Entity entity);
 
-		inline void EntitySignatureChanged(Entity entity, const Signature & entitySignature);
+		inline void entitySignatureChanged(Entity entity, const Signature & entitySignature);
 
 	private:
 		std::unordered_map<const char *, Signature> mSignatures{};
 		std::unordered_map<const char *, System *> mSystems{};
+	};
+
+	class World
+	{
+	public:
+		inline static World & getInstance();
+
+		inline Entity createEntity();
+		inline void destroyEntity(Entity entity);
+
+
+		template <typename T>
+		void registerComponent();
+
+		template <typename T>
+		void addComponent(Entity entity, const T & component);
+		template <typename T>
+		void removeComponent(Entity entity);
+
+		template <typename T>
+		T & getComponent(Entity entity);
+		template <typename T>
+		const T & getComponent(Entity entity) const;
+
+		template <typename T>
+		ComponentType getComponentType();
+
+
+		template <typename T>
+		T * registerSystem();
+
+		template <typename T>
+		void setSystemSignature(const Signature & signature);
+
+
+		World & operator=(const World & other) = delete;
+		World & operator=(World && other) = delete;
+		World(World && other) = delete;
+		World(const World & other) = delete;
+	private:
+		World() = default;
+		~World() = default;
+
+
+		ComponentManager mComponentManager;
+		EntityManager mEntityManager;
+		SystemManager mSystemManager;
 	};
 }
 
