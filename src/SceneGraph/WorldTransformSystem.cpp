@@ -1,6 +1,6 @@
-#include <WorldTransformSystem.h>
-#include <SceneGraph.h>
-#include "Transform.h"
+#include "SceneGraph/WorldTransformSystem.h"
+#include "SceneGraph/SceneGraph.h"
+#include "SceneGraph/Transform.h"
 
 namespace teliod::sg::systems
 {

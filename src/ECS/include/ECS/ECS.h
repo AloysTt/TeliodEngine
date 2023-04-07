@@ -181,6 +181,6 @@ namespace teliod::ecs
 	};
 }
 
-#include <ECS.inl>
+#include <ECS/ECS.inl>
 
 #endif // TELIOD_ECS_ECS_H

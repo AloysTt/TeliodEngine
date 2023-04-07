@@ -1,6 +1,6 @@
-#include <SceneGraph.h>
-#include <WorldTransformSystem.h>
-#include <Transform.h>
+#include "SceneGraph/SceneGraph.h"
+#include "SceneGraph/WorldTransformSystem.h"
+#include "SceneGraph/Transform.h"
 #include <iostream>
 #include <string>
 

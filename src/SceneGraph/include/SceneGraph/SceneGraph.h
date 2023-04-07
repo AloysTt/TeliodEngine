@@ -1,7 +1,7 @@
 #ifndef TELIOD_SG_SCENEGRAPH__H
 #define TELIOD_SG_SCENEGRAPH__H
 
-#include <ECS.h>
+#include "ECS/ECS.h"
 
 namespace teliod::sg
 {

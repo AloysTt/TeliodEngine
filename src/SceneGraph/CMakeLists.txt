@@ -1,7 +1,7 @@
 set(SceneGraph_sources
-		SceneGraph.cpp include/SceneGraph.h
-		include/Transform.h
-		WorldTransformSystem.cpp include/WorldTransformSystem.h
+		SceneGraph.cpp include/SceneGraph/SceneGraph.h
+		include/SceneGraph/Transform.h
+		WorldTransformSystem.cpp include/SceneGraph/WorldTransformSystem.h
 )
 
 source_group(SceneGraph FILES ${SceneGraph_sources})
