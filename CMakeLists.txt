@@ -12,3 +12,6 @@ target_link_libraries(engine PRIVATE ECS)
 # Tests
 add_executable(test_ECS test_ECS.cpp)
 target_link_libraries(test_ECS PRIVATE ECS)
+
+add_executable(test_SceneGraph test_SceneGraph.cpp)
+target_link_libraries(test_SceneGraph PRIVATE ECS SceneGraph)
