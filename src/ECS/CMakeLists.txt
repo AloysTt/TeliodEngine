@@ -1,5 +1,6 @@
+set(INCLUDE_DIR include/ECS)
 set(ECS_sources
-	ECS.cpp include/ECS/ECS.h include/ECS/ECS.inl
+	ECS.cpp ${INCLUDE_DIR}/ECS.h ${INCLUDE_DIR}/ECS.inl
 )
 
 source_group(ECS FILES ${ECS_sources})
