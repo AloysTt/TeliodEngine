@@ -37,7 +37,7 @@ int main(int argc, char **argv)
 	w.registerComponent<ArrayComponent>();
 
 	TestSystem * system = w.registerSystem<TestSystem>();
-
+	TestSystem * shouldBeSame = w.getSystem<TestSystem>();
 
 	teliod::ecs::Signature s;
 	s.set(w.getComponentType<IntComponent>());

@@ -2,6 +2,8 @@
 #include <typeinfo>
 #include <cstring>
 #include <algorithm>
+#include "ECS.h"
+
 
 namespace teliod::ecs
 {
@@ -212,6 +214,15 @@ namespace teliod::ecs
 
 	}
 
+	template<typename T>
+	T * SystemManager::getSystem()
+	{
+		const char* typeName = typeid(T).name();
+		assert(mSystems.find(typeName) != mSystems.end() && "System not found.");
+
+		return static_cast<T *>(mSystems[typeName]);
+	}
+
 
 	//
 	// Definitions for World
@@ -292,5 +303,11 @@ namespace teliod::ecs
 	void World::setSystemSignature(const Signature &signature)
 	{
 		mSystemManager.setSignature<T>(signature);
+	}
+
+	template<typename T>
+	T * World::getSystem()
+	{
+		return mSystemManager.getSystem<T>();
 	}
 }

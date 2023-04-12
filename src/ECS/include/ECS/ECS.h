@@ -128,6 +128,9 @@ namespace teliod::ecs
 
 		inline void entitySignatureChanged(Entity entity, const Signature & entitySignature);
 
+		template<typename T>
+		T * getSystem();
+
 	private:
 		std::unordered_map<const char *, Signature> mSignatures{};
 		std::unordered_map<const char *, System *> mSystems{};
@@ -164,6 +167,9 @@ namespace teliod::ecs
 
 		template <typename T>
 		void setSystemSignature(const Signature & signature);
+
+		template<typename T>
+		T * getSystem();
 
 
 		World & operator=(const World & other) = delete;
