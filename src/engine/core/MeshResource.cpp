@@ -94,6 +94,10 @@ namespace teliod::core
 	{
 		if (vertices != nullptr)
 			delete [] vertices;
+		if (normals != nullptr)
+			delete [] normals;
+		if (triangles != nullptr)
+			delete [] triangles;
 	}
 
 	const glm::vec3 * MeshResource::getVertices() const

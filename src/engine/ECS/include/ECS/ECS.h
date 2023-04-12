@@ -118,6 +118,8 @@ namespace teliod::ecs
 	class SystemManager
 	{
 	public:
+		~SystemManager();
+
 		template <typename T>
 		T * registerSystem();
 

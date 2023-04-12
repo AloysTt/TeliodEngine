@@ -57,4 +57,10 @@ namespace teliod::ecs
 		for (std::unordered_map<const char *, IComponentArray *>::value_type & pArray : mComponentArrays)
 			delete pArray.second;
 	}
+
+	SystemManager::~SystemManager()
+	{
+		for (auto & pair : mSystems)
+			delete pair.second;
+	}
 }

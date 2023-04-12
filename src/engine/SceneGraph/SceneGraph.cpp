@@ -103,5 +103,7 @@ namespace teliod::sg
 	Node::~Node()
 	{
 		ecs::World::getInstance().destroyEntity(mEntity);
+		for (Node * child : mChildren)
+			delete child;
 	}
 }
