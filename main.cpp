@@ -1,4 +1,9 @@
+#include <game/GameApplication.h>
+
 int main(int argc, char **argv)
 {
-	return 0;
+	GameApplication app;
+	app.init();
+	app.run();
+	app.destroy();
 }

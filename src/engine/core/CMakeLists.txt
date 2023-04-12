@@ -1,13 +1,18 @@
 set(INCLUDE_DIR include/core)
 set(core_sources
 		${INCLUDE_DIR}/ResourceManager.h ${INCLUDE_DIR}/ResourceManager.inl
+		Application.cpp ${INCLUDE_DIR}/Application.h
 		MeshResource.cpp ${INCLUDE_DIR}/MeshResource.h
 		GlobalSettings.cpp ${INCLUDE_DIR}/GlobalSettings.h
 )
 
 source_group(core FILES ${core_sources})
 add_library(core STATIC ${core_sources})
-target_link_libraries(core PUBLIC glm assimp)
+target_link_libraries(core PUBLIC
+	glm
+	assimp
+	SceneGraph
+)
 target_include_directories(core PUBLIC
 		include
 )

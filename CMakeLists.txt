@@ -7,8 +7,12 @@ add_subdirectory(lib)
 add_subdirectory(src)
 add_subdirectory(test)
 
-add_executable(engine main.cpp)
-target_link_libraries(engine PRIVATE
+add_executable(game
+	main.cpp
+	src/game/include/game/GameApplication.h
+	src/game/GameApplication.cpp
+)
+target_link_libraries(game PRIVATE
 		# External
 		GLAD
 		glfw
@@ -16,4 +20,7 @@ target_link_libraries(engine PRIVATE
 		ECS
 		SceneGraph
 		core
+)
+target_include_directories(game PRIVATE
+	src/game/include
 )
