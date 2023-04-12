@@ -1,7 +1,7 @@
 #include <cassert>
 #include <typeinfo>
-#include "ECS.h"
-
+#include <cstring>
+#include <algorithm>
 
 namespace teliod::ecs
 {
