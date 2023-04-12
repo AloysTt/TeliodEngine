@@ -12,6 +12,7 @@ target_link_libraries(core PUBLIC
 	glm
 	assimp
 	SceneGraph
+	render
 )
 target_include_directories(core PUBLIC
 		include

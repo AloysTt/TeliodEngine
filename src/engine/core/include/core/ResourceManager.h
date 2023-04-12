@@ -33,11 +33,11 @@ namespace teliod::core
 //
 // Macros
 
-#define DECLARE_RESOURCE(name, manager)	\
-friend class ResourceManager<name>;		\
-friend class manager;                   \
-private:                                \
-	name();                             \
+#define DECLARE_RESOURCE(name, manager)					\
+friend class teliod::core::ResourceManager<name>;		\
+friend class manager;                   				\
+private:                                				\
+	name();                             				\
     ~name();
 
 #endif // TELIOD_CORE_RESOURCEMANAGER_H
