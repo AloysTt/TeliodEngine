@@ -163,12 +163,15 @@ namespace teliod::ecs
 
 
 		template <typename T>
+		requires std::derived_from<T, System>
 		T * registerSystem();
 
 		template <typename T>
+		requires std::derived_from<T, System>
 		void setSystemSignature(const Signature & signature);
 
 		template<typename T>
+		requires std::derived_from<T, System>
 		T * getSystem();
 
 

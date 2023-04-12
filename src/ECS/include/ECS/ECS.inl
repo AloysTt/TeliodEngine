@@ -294,18 +294,21 @@ namespace teliod::ecs
 	}
 
 	template <typename T>
+	requires std::derived_from<T, System>
 	T * World::registerSystem()
 	{
 		return mSystemManager.registerSystem<T>();
 	}
 
 	template <typename T>
+	requires std::derived_from<T, System>
 	void World::setSystemSignature(const Signature &signature)
 	{
 		mSystemManager.setSignature<T>(signature);
 	}
 
 	template<typename T>
+	requires std::derived_from<T, System>
 	T * World::getSystem()
 	{
 		return mSystemManager.getSystem<T>();
