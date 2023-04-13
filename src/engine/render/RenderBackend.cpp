@@ -44,7 +44,13 @@ namespace teliod::render
 		glfwTerminate();
 	}
 
-	void RenderBackend::update()
+	void RenderBackend::preFrameUpdate()
+	{
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+	}
+
+	void RenderBackend::postFrameUpdate()
 	{
 		glfwSwapBuffers(window);
 		glfwPollEvents();

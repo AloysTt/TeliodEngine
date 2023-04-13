@@ -26,7 +26,7 @@ namespace teliod::render
 			GLuint view = glGetUniformLocation(shader.getShaderProgram(), "view");
 			GLuint proj = glGetUniformLocation(shader.getShaderProgram(), "proj");
 			glm::mat4 mat(1.0);
-			glUniformMatrix4fv(model, 1, GL_FALSE, &tf.worldTransform[0][0]);
+			glUniformMatrix4fv(model, 1, GL_FALSE, &tf.getWorldTransform()[0][0]);
 			glUniformMatrix4fv(view, 1, GL_FALSE, &mat[0][0]);
 			glUniformMatrix4fv(proj, 1, GL_FALSE, &mat[0][0]);
 			// bind vao

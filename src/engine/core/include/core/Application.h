@@ -6,6 +6,11 @@ namespace teliod::render
 	class MeshRendererSystem;
 }
 
+namespace teliod::sg::systems
+{
+	class WorldTransformSystem;
+}
+
 namespace teliod::core
 {
 	class Application
@@ -30,6 +35,7 @@ namespace teliod::core
 		bool shouldClose;
 	private:
 		render::MeshRendererSystem * pMeshRendererSystem;
+		sg::systems::WorldTransformSystem * pWorldTransformSystem;
 	};
 }
 

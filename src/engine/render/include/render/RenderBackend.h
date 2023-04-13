@@ -13,7 +13,8 @@ namespace teliod::render
 
 		void init();
 		void destroy();
-		void update();
+		void preFrameUpdate();
+		void postFrameUpdate();
 
 		bool windowShouldClose() const;
 	private:

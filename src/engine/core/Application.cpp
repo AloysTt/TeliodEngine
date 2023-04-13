@@ -3,6 +3,7 @@
 #include <render/RenderBackend.h>
 #include <render/MeshRendererSystem.h>
 #include <SceneGraph/Transform.h>
+#include <SceneGraph/WorldTransformSystem.h>
 #include <render/Components.h>
 #include <core/Components.h>
 #include <render/ShaderResource.h>
@@ -45,6 +46,7 @@ namespace teliod::core
 		render::ShaderResourceManager::getInstance(); // init shader resources
 
 		pMeshRendererSystem = world.getSystem<render::MeshRendererSystem>();
+		pWorldTransformSystem = world.getSystem<sg::systems::WorldTransformSystem>();
 
 		initInternal();
 	}
@@ -62,9 +64,11 @@ namespace teliod::core
 		auto& backend = render::RenderBackend::getInstance();
 		while (!shouldClose && !backend.windowShouldClose())
 		{
+			backend.preFrameUpdate();
 			pMeshRendererSystem->render();
+			pWorldTransformSystem->update();
 			runInternal();
-			backend.update();
+			backend.postFrameUpdate();
 		}
 	}
 }

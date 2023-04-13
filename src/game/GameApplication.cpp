@@ -1,6 +1,7 @@
 #include <game/GameApplication.h>
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
+#include "SceneGraph/Transform.h"
 
 #include <ECS/ECS.h>
 #include <SceneGraph/SceneGraph.h>
@@ -17,11 +18,11 @@ void GameApplication::initInternal()
 	ecs::World & w = ecs::World::getInstance();
 	sg::SceneGraph& sg = sg::SceneGraph::getInstance();
 	sg::Node * child = sg.getRoot()->createChild();
-	ecs::Entity e = child->getEntity();
+	torus = child->getEntity();
 
 	core::MeshComponent meshComp(core::MeshResourceManager::getInstance().getResource("torus"));
-	w.addComponent<core::MeshComponent>(e, core::MeshComponent(core::MeshResourceManager::getInstance().getResource("torus")));
-	w.addComponent<render::MeshRenderer>(e, render::MeshRenderer(e, render::ShaderResourceManager::getInstance().getResource("default")));
+	w.addComponent<core::MeshComponent>(torus, core::MeshComponent(core::MeshResourceManager::getInstance().getResource("torus")));
+	w.addComponent<render::MeshRenderer>(torus, render::MeshRenderer(torus, render::ShaderResourceManager::getInstance().getResource("default")));
 }
 
 void GameApplication::destroyInternal()
@@ -31,4 +32,5 @@ void GameApplication::destroyInternal()
 
 void GameApplication::runInternal()
 {
+	ecs::World::getInstance().getComponent<sg::Transform>(torus).rotate(0.05f, {0.0f, 1.0f, 0.0f});
 }
