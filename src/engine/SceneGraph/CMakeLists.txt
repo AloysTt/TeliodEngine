@@ -1,7 +1,7 @@
 set(INCLUDE_DIR include/SceneGraph)
 set(SceneGraph_sources
 		SceneGraph.cpp ${INCLUDE_DIR}/SceneGraph.h
-		Transform.cpp ${INCLUDE_DIR}/Transform.h ${INCLUDE_DIR}/Transform.inl
+		${INCLUDE_DIR}/Transform.h ${INCLUDE_DIR}/Transform.inl
 		WorldTransformSystem.cpp ${INCLUDE_DIR}/WorldTransformSystem.h
 )
 
