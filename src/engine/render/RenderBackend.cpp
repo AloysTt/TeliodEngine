@@ -37,6 +37,8 @@ namespace teliod::render
 		glfwMakeContextCurrent(window);
 		res = gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
 		assert(res && "Failed to initialize GLAD.");
+
+		glEnable(GL_DEPTH_TEST);
 	}
 
 	void RenderBackend::destroy()
@@ -47,7 +49,7 @@ namespace teliod::render
 	void RenderBackend::preFrameUpdate()
 	{
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
 	void RenderBackend::postFrameUpdate()
