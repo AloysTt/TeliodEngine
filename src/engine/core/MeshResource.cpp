@@ -105,8 +105,23 @@ namespace teliod::core
 		return vertices;
 	}
 
+	const glm::vec3 * MeshResource::getNormals() const
+	{
+		return normals;
+	}
+
 	int MeshResource::getNumVertices() const
 	{
 		return numVertices;
+	}
+
+	const unsigned int *MeshResource::getTriangles() const
+	{
+		return triangles;
+	}
+
+	int MeshResource::getNumTriangles() const
+	{
+		return numTriangles;
 	}
 }

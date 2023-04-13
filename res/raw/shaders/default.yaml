@@ -1,0 +1,5 @@
+---
+name: default
+stages:
+  vs: "default_vs.glsl"
+  fs: "default_fs.glsl"

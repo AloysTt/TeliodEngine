@@ -50,6 +50,7 @@ namespace teliod::ecs
 		ComponentArray();
 
 		void insertData(Entity entity, const T & component);
+		void insertData(Entity entity, T && component);
 		void removeData(Entity entity);
 
 		const T & getData(Entity entity) const;
@@ -86,6 +87,8 @@ namespace teliod::ecs
 
 		template <typename T>
 		void addComponent(Entity entity, const T & component);
+		template <typename T>
+		void addComponent(Entity entity, T&& component);
 		template <typename T>
 		void removeComponent(Entity entity);
 
@@ -152,6 +155,8 @@ namespace teliod::ecs
 
 		template <typename T>
 		void addComponent(Entity entity, const T & component);
+		template <typename T>
+		void addComponent(Entity entity, T && component);
 		template <typename T>
 		void removeComponent(Entity entity);
 

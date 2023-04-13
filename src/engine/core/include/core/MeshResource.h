@@ -17,7 +17,11 @@ namespace teliod::core
 		DECLARE_RESOURCE(MeshResource, MeshResourceManager)
 	public:
 		const glm::vec3 * getVertices() const;
+		const glm::vec3 * getNormals() const;
 		int getNumVertices() const;
+
+		const unsigned int * getTriangles() const;
+		int getNumTriangles() const;
 	private:
 		glm::vec3 * vertices;
 		glm::vec3 * normals;

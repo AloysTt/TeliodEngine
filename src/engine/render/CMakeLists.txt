@@ -1,5 +1,6 @@
 set(INCLUDE_DIR include/render)
 set(render_sources
+		MeshRendererSystem.cpp ${INCLUDE_DIR}/MeshRendererSystem.h
 		RenderBackend.cpp ${INCLUDE_DIR}/RenderBackend.h
 		Components.cpp ${INCLUDE_DIR}/Components.h
 		ShaderResource.cpp ${INCLUDE_DIR}/ShaderResource.h
@@ -12,6 +13,7 @@ target_link_libraries(render PUBLIC
 		GLAD
 		glfw
 )
+target_link_libraries(render PRIVATE yaml-cpp)
 target_include_directories(render PUBLIC
 		include
 )

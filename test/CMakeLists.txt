@@ -12,3 +12,6 @@ target_link_libraries(test_Assimp PRIVATE assimp)
 
 add_executable(test_ResManager test_ResManager.cpp)
 target_link_libraries(test_ResManager PRIVATE core)
+
+add_executable(test_ShaderManager test_ShaderManager.cpp)
+target_link_libraries(test_ShaderManager PRIVATE render)

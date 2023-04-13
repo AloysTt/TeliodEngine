@@ -16,6 +16,9 @@ namespace teliod::render
 	{
 		int res = glfwInit();
 		assert(res != GLFW_FALSE && "Failed to initialize GLFW.");
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 		window = glfwCreateWindow(800, 600, "Game", nullptr, nullptr);
 		if (nullptr == window)

@@ -1,6 +1,11 @@
 #ifndef TELIOD_CORE_APPLICATION_H
 #define TELIOD_CORE_APPLICATION_H
 
+namespace teliod::render
+{
+	class MeshRendererSystem;
+}
+
 namespace teliod::core
 {
 	class Application
@@ -24,6 +29,7 @@ namespace teliod::core
 	protected:
 		bool shouldClose;
 	private:
+		render::MeshRendererSystem * pMeshRendererSystem;
 	};
 }
 

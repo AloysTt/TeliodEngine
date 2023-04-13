@@ -2,6 +2,7 @@
 #include <typeinfo>
 #include <cstring>
 #include <algorithm>
+#include <utility>
 #include "ECS.h"
 
 
@@ -21,11 +22,9 @@ namespace teliod::ecs
 	}
 
 	template<typename T>
-	void ComponentArray<T>::insertData(Entity entity, const T &component)
+	void ComponentArray<T>::insertData(Entity entity, const T & component)
 	{
-		assert(std::find(mEntityToIndexMap,
-						 mEntityToIndexMap+MAX_ENTITIES,
-						 entity) == mEntityToIndexMap+MAX_ENTITIES
+		assert(mEntityToIndexMap[entity] == INVALID_INDEX
 						 && "Component added to same entity more than once.");
 
 		IndexType newIndex = mSize;
@@ -36,11 +35,22 @@ namespace teliod::ecs
 	}
 
 	template<typename T>
+	void ComponentArray<T>::insertData(Entity entity, T && component)
+	{
+		assert(mEntityToIndexMap[entity] == INVALID_INDEX
+			   && "Component added to same entity more than once.");
+
+		IndexType newIndex = mSize;
+		mEntityToIndexMap[entity] = newIndex;
+		mIndexToEntityMap[newIndex] = entity;
+		mComponentArray[newIndex] = std::forward<T>(component);
+		++mSize;
+	}
+
+	template<typename T>
 	void ComponentArray<T>::removeData(Entity entity)
 	{
-		assert(std::find(mEntityToIndexMap,
-						 mEntityToIndexMap+MAX_ENTITIES,
-						 entity) != mEntityToIndexMap+MAX_ENTITIES
+		assert(mEntityToIndexMap[entity] != INVALID_INDEX
 						 && "Removing non-existent component.");
 
 		IndexType indexOfRemovedEntity = mEntityToIndexMap[entity];
@@ -60,9 +70,7 @@ namespace teliod::ecs
 	template<typename T>
 	const T &ComponentArray<T>::getData(Entity entity) const
 	{
-		assert(std::find(mEntityToIndexMap,
-						 mEntityToIndexMap+MAX_ENTITIES,
-						 entity) != mEntityToIndexMap+MAX_ENTITIES
+		assert(mEntityToIndexMap[entity] != INVALID_INDEX
 						 && "Retrieving non-existent component.");
 		return mComponentArray[mEntityToIndexMap[entity]];
 	}
@@ -70,9 +78,7 @@ namespace teliod::ecs
 	template<typename T>
 	T &ComponentArray<T>::getData(Entity entity)
 	{
-		assert(std::find(mEntityToIndexMap,
-						 mEntityToIndexMap+MAX_ENTITIES,
-						 entity) != mEntityToIndexMap+MAX_ENTITIES
+		assert(mEntityToIndexMap[entity] != INVALID_INDEX
 						 && "Retrieving non-existent component.");
 		return mComponentArray[mEntityToIndexMap[entity]];
 	}
@@ -80,9 +86,7 @@ namespace teliod::ecs
 	template<typename T>
 	void ComponentArray<T>::entityDestroyed(Entity entity)
 	{
-		if (std::find(mEntityToIndexMap,
-					  mEntityToIndexMap+MAX_ENTITIES,
-					  entity) != mEntityToIndexMap+MAX_ENTITIES)
+		if (mEntityToIndexMap[entity] != INVALID_INDEX)
 			removeData(entity);
 	}
 
@@ -119,9 +123,15 @@ namespace teliod::ecs
 	}
 
 	template <typename T>
-	void ComponentManager::addComponent(Entity entity, const T &component)
+	void ComponentManager::addComponent(Entity entity, const T & component)
 	{
 		getComponentArray<T>()->insertData(entity, component);
+	}
+
+	template <typename T>
+	void ComponentManager::addComponent(Entity entity, T&& component)
+	{
+		getComponentArray<T>()->insertData(entity, std::forward<T>(component));
 	}
 
 	template <typename T>
@@ -255,6 +265,18 @@ namespace teliod::ecs
 	void World::addComponent(Entity entity, const T &component)
 	{
 		mComponentManager.addComponent<T>(entity, component);
+
+		Signature signature = mEntityManager.getSignature(entity);
+		signature.set(mComponentManager.getComponentType<T>(), true);
+		mEntityManager.setSignature(entity, signature);
+
+		mSystemManager.entitySignatureChanged(entity, signature);
+	}
+
+	template <typename T>
+	void World::addComponent(Entity entity, T&& component)
+	{
+		mComponentManager.addComponent<T>(entity, std::forward<T>(component));
 
 		Signature signature = mEntityManager.getSignature(entity);
 		signature.set(mComponentManager.getComponentType<T>(), true);

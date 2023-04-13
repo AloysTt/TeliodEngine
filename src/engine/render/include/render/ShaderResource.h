@@ -13,6 +13,9 @@ namespace teliod::render
 	{
 		DECLARE_RESOURCE(ShaderResource, ShaderResourceManager)
 	public:
+		unsigned int getShaderProgram() const;
+	private:
+		unsigned int shaderProgram;
 	};
 
 	class ShaderResourceManager : public core::ResourceManager<ShaderResource>
@@ -24,6 +27,8 @@ namespace teliod::render
 	private:
 		ShaderResourceManager();
 		~ShaderResourceManager() override = default;
+
+		void checkCompileErrors(unsigned int shader, std::string type);
 	};
 }
 
