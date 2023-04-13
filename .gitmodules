@@ -7,3 +7,6 @@
 [submodule "lib/assimp"]
 	path = lib/assimp
 	url = git@github.com:assimp/assimp.git
+[submodule "lib/yaml-cpp"]
+	path = lib/yaml-cpp
+	url = git@github.com:jbeder/yaml-cpp.git
