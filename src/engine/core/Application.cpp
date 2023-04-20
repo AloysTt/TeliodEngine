@@ -8,6 +8,7 @@
 #include <core/Components.h>
 #include <render/ShaderResource.h>
 #include <chrono>
+#include "core/InputManager.h"
 
 namespace teliod::core
 {
@@ -43,6 +44,7 @@ namespace teliod::core
 
 		auto& backend = render::RenderBackend::getInstance();
 		backend.init();
+		core::InputManager::getInstance().init(backend.getWindow());
 
 		render::ShaderResourceManager::getInstance(); // init shader resources
 

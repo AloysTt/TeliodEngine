@@ -17,6 +17,8 @@ namespace teliod::render
 		void postFrameUpdate();
 
 		bool windowShouldClose() const;
+
+		GLFWwindow * getWindow();
 	private:
 		GLFWwindow * window;
 	};

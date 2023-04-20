@@ -63,4 +63,9 @@ namespace teliod::render
 	{
 		return glfwWindowShouldClose(window);
 	}
+
+	GLFWwindow *RenderBackend::getWindow()
+	{
+		return window;
+	}
 }

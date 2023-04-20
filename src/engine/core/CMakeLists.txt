@@ -2,6 +2,7 @@ set(INCLUDE_DIR include/core)
 set(core_sources
 		${INCLUDE_DIR}/ResourceManager.h ${INCLUDE_DIR}/ResourceManager.inl
 		Components.cpp ${INCLUDE_DIR}/Components.h
+		InputManager.cpp ${INCLUDE_DIR}/InputManager.h
 		Application.cpp ${INCLUDE_DIR}/Application.h
 		MeshResource.cpp ${INCLUDE_DIR}/MeshResource.h
 		GlobalSettings.cpp ${INCLUDE_DIR}/GlobalSettings.h
