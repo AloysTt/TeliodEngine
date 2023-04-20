@@ -35,6 +35,7 @@ namespace teliod::render
 		);
 
 		glfwMakeContextCurrent(window);
+		glfwSwapInterval(0);
 		res = gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
 		assert(res && "Failed to initialize GLAD.");
 
