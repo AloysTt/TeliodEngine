@@ -11,7 +11,7 @@ protected:
 
 	void destroyInternal() override;
 
-	void runInternal() override;
+	void runInternal(float dt) override;
 private:
 	teliod::ecs::Entity torus;
 };

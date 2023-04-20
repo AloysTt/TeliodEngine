@@ -7,6 +7,7 @@
 #include <SceneGraph/SceneGraph.h>
 #include <render/Components.h>
 #include <core/Components.h>
+#include <iostream>
 
 namespace ecs = teliod::ecs;
 namespace sg = teliod::sg;
@@ -30,7 +31,8 @@ void GameApplication::destroyInternal()
 
 }
 
-void GameApplication::runInternal()
+void GameApplication::runInternal(float dt)
 {
-	ecs::World::getInstance().getComponent<sg::Transform>(torus).rotate(0.05f, {0.0f, 1.0f, 0.0f});
+	std::cout << dt << std::endl;
+	ecs::World::getInstance().getComponent<sg::Transform>(torus).rotate(glm::radians(1.0f)*dt, {0.0f, 1.0f, 0.0f});
 }

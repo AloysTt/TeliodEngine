@@ -7,6 +7,7 @@
 #include <render/Components.h>
 #include <core/Components.h>
 #include <render/ShaderResource.h>
+#include <chrono>
 
 namespace teliod::core
 {
@@ -62,12 +63,17 @@ namespace teliod::core
 	void Application::run()
 	{
 		auto& backend = render::RenderBackend::getInstance();
+		auto lastFrame = std::chrono::high_resolution_clock::now();
 		while (!shouldClose && !backend.windowShouldClose())
 		{
 			backend.preFrameUpdate();
 			pMeshRendererSystem->render();
 			pWorldTransformSystem->update();
-			runInternal();
+
+			std::chrono::duration<float, std::centi> diff(std::chrono::high_resolution_clock::now() - lastFrame);
+			lastFrame = std::chrono::high_resolution_clock::now();
+			runInternal(diff.count());
+
 			backend.postFrameUpdate();
 		}
 	}

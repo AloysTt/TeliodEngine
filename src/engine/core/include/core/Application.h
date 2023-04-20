@@ -27,7 +27,7 @@ namespace teliod::core
 		virtual void initInternal() = 0;
 		virtual void destroyInternal() = 0;
 
-		virtual void runInternal() = 0;
+		virtual void runInternal(float dt) = 0;
 	private:
 
 	public:
