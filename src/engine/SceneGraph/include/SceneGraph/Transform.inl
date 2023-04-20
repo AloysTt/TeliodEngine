@@ -1,11 +1,12 @@
 #include <SceneGraph/Transform.h>
 #include <glm/gtx/matrix_decompose.hpp>
+#include <glm/gtx/quaternion.hpp>
 
 namespace teliod::sg
 {
 	inline Transform::Transform()
 	: mPosition(0.0, 0.0, 0.0)
-	, mRotation()
+	, mRotation(0.0f, 0.0f, 0.0f, 1.0f)
 	, mScale(1.0, 1.0, 1.0)
 	, localTransform(1.0)
 	, worldTransform(1.0)
@@ -77,5 +78,10 @@ namespace teliod::sg
 	inline void Transform::scale(const glm::vec3 & _scale)
 	{
 		scale(_scale[0], _scale[1], _scale[2]);
+	}
+
+	glm::vec3 Transform::getDirection() const
+	{
+		return glm::rotate(glm::inverse(getRotation()), glm::vec3(0.0, 0.0, 1.0));
 	}
 }

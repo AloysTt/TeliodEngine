@@ -7,6 +7,7 @@
 #include <render/Components.h>
 #include <core/Components.h>
 #include <render/ShaderResource.h>
+#include <core/Camera.h>
 #include <chrono>
 #include "core/InputManager.h"
 
@@ -31,6 +32,17 @@ namespace teliod::core
 
 		// core
 		world.registerComponent<core::MeshComponent>();
+		world.registerComponent<core::CameraComponent>();
+		world.registerSystem<core::CameraSystem>();
+		ecs::Signature sCam;
+		sCam.set(world.getComponentType<sg::Transform>());
+		sCam.set(world.getComponentType<core::CameraComponent>());
+		world.setSystemSignature<core::CameraSystem>(sCam);
+		{
+			// create camera
+			ecs::Entity cam = sg::SceneGraph::getInstance().getRoot()->createChild()->getEntity();
+			world.addComponent(cam, core::CameraComponent{});
+		}
 
 		// render
 		world.registerComponent<render::MeshRenderer>();
@@ -50,6 +62,7 @@ namespace teliod::core
 
 		pMeshRendererSystem = world.getSystem<render::MeshRendererSystem>();
 		pWorldTransformSystem = world.getSystem<sg::systems::WorldTransformSystem>();
+		pCameraSystem = world.getSystem<core::CameraSystem>();
 
 		initInternal();
 	}
@@ -71,6 +84,7 @@ namespace teliod::core
 			backend.preFrameUpdate();
 			pMeshRendererSystem->render();
 			pWorldTransformSystem->update();
+			pCameraSystem->update();
 
 			std::chrono::duration<float, std::centi> diff(std::chrono::high_resolution_clock::now() - lastFrame);
 			lastFrame = std::chrono::high_resolution_clock::now();

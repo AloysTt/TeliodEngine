@@ -22,6 +22,8 @@ namespace teliod::sg
 		inline const glm::quat & getRotation() const;
 		inline const glm::vec3 & getScale() const;
 
+		inline glm::vec3 getDirection() const;
+
 		inline const glm::mat4 & getLocalTransform() const;
 		inline const glm::mat4 & getWorldTransform() const;
 
