@@ -21,6 +21,13 @@ namespace teliod::core
 
         void* UpdateCallback( GLFWwindow* _window, int key, int scancode, int action, int mods );
 
+<<<<<<< Updated upstream
+=======
+        void MapAction( std::string& action, int key );
+
+        bool isKeyPressed( int key ) const;
+        bool isActionDone( std::string& action ) const;
+>>>>>>> Stashed changes
 
 
         public:
@@ -31,9 +38,18 @@ namespace teliod::core
             bool isKeyPressed( int key ) const;
             bool isActionDone( std::string& action ) const;
 
+<<<<<<< Updated upstream
         private:
             GLFWwindow * window;
     };
+=======
+        const unsigned short EnableMask = 0x8000;
+        const unsigned short DisableMask = 0x7fff;
+        std::unordered_map< std::string, unsigned short > action_mappings;
+
+		GLFWwindow * window;
+	};
+>>>>>>> Stashed changes
 }
 
 #endif // TELIOD_CORE_INPUTMANAGER_H
