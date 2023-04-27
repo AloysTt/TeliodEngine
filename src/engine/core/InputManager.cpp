@@ -12,6 +12,10 @@ namespace teliod::core
 	InputManager::InputManager()
 	: window(nullptr)
 	, isHoveringWindow(false)
+	, isCursorCaptured(false)
+	, lastPosX(0.0f)
+	, lastPosY(0.0f)
+	, mouseMovementCallbacks()
 	{
 
 	}
@@ -28,6 +32,9 @@ namespace teliod::core
 		glfwSetCursorEnterCallback(window, [](GLFWwindow * _window, int entered){
 			InputManager::getInstance().mouseEnterCallback(_window, entered);
 		});
+		glfwSetCursorPosCallback(window, [](GLFWwindow * _window, double xpos, double ypos){
+			InputManager::getInstance().cursorPosCallback(_window, xpos, ypos);
+		});
 	}
 
 	bool InputManager::isKeyPressed(int key) const
@@ -40,11 +47,13 @@ namespace teliod::core
 		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		if (glfwRawMouseMotionSupported())
 			glfwSetInputMode(window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
+		isCursorCaptured = true;
 	}
 
 	void InputManager::releaseMouse()
 	{
 		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		isCursorCaptured = false;
 	}
 
 	void InputManager::keyCallback(GLFWwindow * _window, int key, int scancode, int action, int mods)
@@ -66,8 +75,30 @@ namespace teliod::core
 		}
 	}
 
-	void InputManager::mouseEnterCallback(GLFWwindow *_window, int entered)
+	void InputManager::mouseEnterCallback(GLFWwindow * _window, int entered)
 	{
 		isHoveringWindow = entered == GLFW_TRUE;
+	}
+
+	void InputManager::cursorPosCallback(GLFWwindow * _window, double xpos, double ypos)
+	{
+		float offsetX = xpos - lastPosX;
+		float offsetY = ypos - lastPosY;
+
+		if (isCursorCaptured)
+		{
+			for (auto & func : mouseMovementCallbacks)
+			{
+				func(offsetX, offsetY);
+			}
+		}
+
+		lastPosX = xpos;
+		lastPosY = ypos;
+	}
+
+	void InputManager::addMouseMovementCallback(const std::function<void(float, float)> & callback)
+	{
+		mouseMovementCallbacks.push_back(callback);
 	}
 }

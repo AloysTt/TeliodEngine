@@ -31,6 +31,9 @@ namespace teliod::core
 		const glm::mat4 & getViewMatrix() const;
 		const glm::mat4 & getProjMatrix() const;
 
+		void addPitch(float _pitch);
+		void addYaw(float _yaw);
+
 		sg::Transform & getTransform();
 
 		~Camera() = default;
@@ -40,6 +43,9 @@ namespace teliod::core
 		glm::mat4x4 view;
 		glm::mat4x4 proj;
 		ecs::Entity entity;
+
+		float pitch;
+		float yaw;
 	};
 }
 

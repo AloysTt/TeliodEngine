@@ -1,5 +1,6 @@
 #include <core/Camera.h>
 #include "SceneGraph/Transform.h"
+#define EPSILON 1e-05f
 
 namespace teliod::core
 {
@@ -7,9 +8,16 @@ namespace teliod::core
 	{
 		Camera & cam = Camera::getInstance();
 		cam.entity = *getEntities().begin();
-		const sg::Transform & tf = ecs::World::getInstance().getComponent<sg::Transform>(cam.entity);
-		glm::vec3 dir{glm::rotate(glm::inverse(tf.getRotation()), glm::vec3(0.0, 0.0, -1.0))};
+		sg::Transform & tf = ecs::World::getInstance().getComponent<sg::Transform>(cam.entity);
 
+		glm::vec3 dir;
+		dir.x = cos(glm::radians(cam.yaw)) * cos(glm::radians(cam.pitch));
+		dir.y = sin(glm::radians(cam.pitch));
+		dir.z = sin(glm::radians(cam.yaw)) * cos(glm::radians(cam.pitch));
+		dir = glm::normalize(dir);
+
+		glm::quat dirQuat{glm::quatLookAtLH(dir, {0.0f, 1.0f, 0.0f})};
+		tf.setRotation(dirQuat);
 		cam.view = glm::lookAt(tf.getPosition(), tf.getPosition()+dir, {0.0f, 1.0f, 0.0f});
 	}
 
@@ -23,6 +31,8 @@ namespace teliod::core
 	: view(1.0f)
 	, proj(glm::perspective(45.0f, 800.0f/600.0f, 0.1f, 100.0f))
 	, entity(0)
+	, pitch(0)
+	, yaw(0)
 	{
 	}
 
@@ -39,5 +49,19 @@ namespace teliod::core
 	sg::Transform & Camera::getTransform()
 	{
 		return ecs::World::getInstance().getComponent<sg::Transform>(entity);
+	}
+
+	void Camera::addPitch(float _pitch)
+	{
+		pitch+=_pitch;
+		pitch = glm::clamp(pitch, -90.0f+EPSILON, 90.0f-EPSILON);
+		std::cout << "pitch: " << pitch << " yaw: " << yaw << std::endl;
+	}
+
+	void Camera::addYaw(float _yaw)
+	{
+		yaw+=_yaw;
+		if (yaw < 0.0f) yaw +=360.0f;
+		if (yaw > 360.0f) yaw -=360.0f;
 	}
 }
