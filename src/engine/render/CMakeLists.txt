@@ -4,6 +4,8 @@ set(render_sources
 		RenderBackend.cpp ${INCLUDE_DIR}/RenderBackend.h
 		Components.cpp ${INCLUDE_DIR}/Components.h
 		ShaderResource.cpp ${INCLUDE_DIR}/ShaderResource.h
+		TextureResource.cpp ${INCLUDE_DIR}/TextureResource.h
+		${INCLUDE_DIR}/stb_image.h
 )
 
 source_group(render FILES ${render_sources})

@@ -10,12 +10,12 @@ namespace teliod::core
 	}
 
 	InputManager::InputManager()
-	: window(nullptr)
-	, isHoveringWindow(false)
-	, isCursorCaptured(false)
-	, lastPosX(0.0f)
-	, lastPosY(0.0f)
-	, mouseMovementCallbacks()
+			: window(nullptr)
+			, isHoveringWindow(false)
+			, isCursorCaptured(false)
+			, lastPosX(0.0f)
+			, lastPosY(0.0f)
+			, mouseMovementCallbacks()
 	{
 
 	}
