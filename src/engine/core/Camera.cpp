@@ -55,7 +55,6 @@ namespace teliod::core
 	{
 		pitch+=_pitch;
 		pitch = glm::clamp(pitch, -90.0f+EPSILON, 90.0f-EPSILON);
-		std::cout << "pitch: " << pitch << " yaw: " << yaw << std::endl;
 	}
 
 	void Camera::addYaw(float _yaw)

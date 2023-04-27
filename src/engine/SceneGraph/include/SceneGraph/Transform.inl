@@ -2,7 +2,6 @@
 #include <glm/gtx/matrix_decompose.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtx/euler_angles.hpp>
-#include <iostream>
 
 namespace teliod::sg
 {
@@ -113,8 +112,6 @@ namespace teliod::sg
 	glm::vec3 Transform::getDirection() const
 	{
 		return glm::rotate(getRotation(), glm::vec3(0.0, 0.0, 1.0));
-
-//		return toMat4(mRotation)[2];
 	}
 
 	inline void Transform::updateLocalTransform()
