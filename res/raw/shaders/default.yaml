@@ -2,4 +2,14 @@
 name: default
 stages:
   vs: "default_vs.glsl"
+  va:
+    - "in vec3 position"
+    - "in vec3 normal"
+    - "uniform mat4 model"
+    - "uniform mat4 view"
+    - "uniform mat4 proj"
+    - "out vec3 frag_normal"
   fs: "default_fs.glsl"
+  fa:
+    - "in vec3 frag_normal"
+    - "out vec4 fragColor"

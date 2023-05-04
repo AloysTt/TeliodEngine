@@ -31,6 +31,7 @@ namespace teliod::render
 
             std::string base_filename = file.path().string().substr(file.path().string().find_last_of("/\\") + 1);
             TextureResource * res = new TextureResource();
+            res->name = base_filename.substr(0, base_filename.find_last_of('.'));
 
             GLuint texture;
             glGenTextures(1, &texture);

@@ -20,8 +20,6 @@ namespace teliod::render
 			const render::ShaderResource & shader = renderer.getShaderResource();
 			sg::Transform & tf = w.getComponent<sg::Transform>(e);
 
-			glUseProgram(shader.getShaderProgram());
-
 			// set uniforms
 			GLuint model = glGetUniformLocation(shader.getShaderProgram(), "model");
 			GLuint view = glGetUniformLocation(shader.getShaderProgram(), "view");

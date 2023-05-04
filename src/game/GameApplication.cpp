@@ -35,7 +35,12 @@ void GameApplication::initInternal()
 	w.addComponent<render::MeshRenderer>(cube, render::MeshRenderer(cube, render::ShaderResourceManager::getInstance().getResource("default")));
 	w.getComponent<sg::Transform>(cube).translate({2.0f, 0.0, 0.0});
 
-	core::InputManager::getInstance().addMouseMovementCallback([](float offsetX, float offsetY)
+    render::ShaderResourceManager::getInstance().getResource("default")->setUniform(true, (std::string &) "model", (void*) &w.getComponent<sg::Transform>(cube).getWorldTransform()[0][0]  );
+    render::ShaderResourceManager::getInstance().getResource("default")->setUniform(true, (std::string &) "view", (void*) &core::Camera::getInstance().getViewMatrix()[0][0]);
+    render::ShaderResourceManager::getInstance().getResource("default")->setUniform(true, (std::string &) "proj", (void*) &core::Camera::getInstance().getProjMatrix()[0][0]);
+    render::ShaderResourceManager::getInstance().getResource("default")->updateShader();
+
+    core::InputManager::getInstance().addMouseMovementCallback([](float offsetX, float offsetY)
 	{
 		sg::Transform & tf = core::Camera::getInstance().getTransform();
 		constexpr float cameraSpeed = 0.05f;

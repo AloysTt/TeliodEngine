@@ -5,6 +5,7 @@ namespace teliod::core
 {
 	InputManager & InputManager::getInstance()
     {
+        static InputManager inputManager;
         return inputManager;
     }
 
@@ -82,6 +83,9 @@ namespace teliod::core
                 else if ( action == GLFW_RELEASE )
                     ActionKey.second &= DisableMask;
             }
+
+            std::string a(ActionKey.first);
+            std::cout << ActionKey.first << " pressed ? " << isActionDone(a) << '\n';
         }
     }
 
@@ -91,20 +95,12 @@ namespace teliod::core
 		isCursorCaptured = false;
 	}
 
-	void InputManager::keyCallback(GLFWwindow * _window, int key, int scancode, int action, int mods)
-	{
-		if (key == GLFW_KEY_ESCAPE)
-		{
-			releaseMouse();
-		}
-	}
-
 	void InputManager::mouseButtonCallback(GLFWwindow * _window, int button, int action, int mods)
 	{
 		if (!isHoveringWindow)
 			return;
 
-		if (isHoveringWindow && button == GLFW_MOUSE_BUTTON_LEFT)
+		if ( button == GLFW_MOUSE_BUTTON_LEFT)
 		{
 			captureMouse();
 		}

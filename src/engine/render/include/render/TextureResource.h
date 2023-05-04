@@ -21,6 +21,7 @@ namespace teliod::render
         unsigned int getW() const;
         unsigned int getH() const;
     private:
+        std::string name;
         unsigned char* rawTex;
         unsigned int mTex;
         unsigned int w, h;

@@ -1,0 +1,28 @@
+---
+name: Phong-Bling
+stages:
+  vs: "Phong_vs.glsl"
+  va:
+    - "in vec3 position"
+    - "in vec3 normal"
+    - "in vec3 tangent"
+    - "in vec3 uv0"
+    - "uniform mat4 model"
+    - "uniform mat4 view"
+    - "uniform mat4 projection"
+    - "uniform vec3 lightPos"
+    - "out vec3 FragPos"
+    - "out vec3 FragNormal"
+    - "out vec2 FragUV0"
+    - "out vec3 FragLightPos"
+  fs: "Phong_fs.glsl"
+  fa:
+    - "in vec3 FragPos"
+    - "in vec3 FragNormal"
+    - "in vec2 FragUV0"
+    - "in vec3 FragLightPos"
+    - "out vec4 FragColor"
+    - "uniform vec4 color"
+    - "uniform vec3 lightColor"
+    - "uniform sampler2D colorTexture"
+    - "uniform Material material"
