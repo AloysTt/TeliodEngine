@@ -13,6 +13,8 @@ namespace teliod::sg::systems
 
 namespace teliod::core
 {
+	class CameraSystem;
+
 	class Application
 	{
 	public:
@@ -36,6 +38,7 @@ namespace teliod::core
 	private:
 		render::MeshRendererSystem * pMeshRendererSystem;
 		sg::systems::WorldTransformSystem * pWorldTransformSystem;
+		core::CameraSystem * pCameraSystem;
 	};
 }
 

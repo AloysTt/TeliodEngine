@@ -20,7 +20,10 @@ namespace teliod::sg
 
 		inline const glm::vec3 & getPosition() const;
 		inline const glm::quat & getRotation() const;
+		inline glm::vec3 getRotationEuler() const;
 		inline const glm::vec3 & getScale() const;
+
+		inline glm::vec3 getDirection() const;
 
 		inline const glm::mat4 & getLocalTransform() const;
 		inline const glm::mat4 & getWorldTransform() const;
@@ -31,6 +34,9 @@ namespace teliod::sg
 		inline void scale(float x, float y, float z);
 		inline void scale(const glm::vec3 & _scale);
 
+		inline void setRotation(float x, float y, float z);
+		inline void setRotation(const glm::quat & quat);
+
 	private:
 		glm::vec3 mPosition;
 		glm::quat mRotation;
@@ -38,6 +44,8 @@ namespace teliod::sg
 
 		glm::mat4 localTransform{1.0};
 		glm::mat4 worldTransform{1.0};
+
+		inline void updateLocalTransform();
 	};
 }
 

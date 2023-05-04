@@ -8,6 +8,17 @@ namespace teliod::core
         return inputManager;
     }
 
+	InputManager::InputManager()
+	: window(nullptr)
+	, isHoveringWindow(false)
+	, isCursorCaptured(false)
+	, lastPosX(0.0f)
+	, lastPosY(0.0f)
+	, mouseMovementCallbacks()
+	{
+
+	}
+
 	void InputManager::init(GLFWwindow *pWindow)
 	{
 		window = pWindow;
@@ -53,6 +64,8 @@ namespace teliod::core
 		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		if (glfwRawMouseMotionSupported())
 			glfwSetInputMode(window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
+
+		isCursorCaptured = true;
 	}
 
 	void InputManager::keyCallback(GLFWwindow * _window, int key, int scancode, int action, int mods)
@@ -72,16 +85,55 @@ namespace teliod::core
         }
     }
 
-	void InputManager::mouseButtonCallback(GLFWwindow * _window, int button, int action, int mods)
+	void InputManager::releaseMouse()
 	{
-		if( !isHoveringWindow )
-            return;
-        else if( button == GLFW_MOUSE_BUTTON_LEFT )
-			captureMouse();
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		isCursorCaptured = false;
 	}
 
-	void InputManager::mouseEnterCallback(GLFWwindow *_window, int entered)
+	void InputManager::keyCallback(GLFWwindow * _window, int key, int scancode, int action, int mods)
+	{
+		if (key == GLFW_KEY_ESCAPE)
+		{
+			releaseMouse();
+		}
+	}
+
+	void InputManager::mouseButtonCallback(GLFWwindow * _window, int button, int action, int mods)
+	{
+		if (!isHoveringWindow)
+			return;
+
+		if (isHoveringWindow && button == GLFW_MOUSE_BUTTON_LEFT)
+		{
+			captureMouse();
+		}
+	}
+
+	void InputManager::mouseEnterCallback(GLFWwindow * _window, int entered)
 	{
 		isHoveringWindow = entered == GLFW_TRUE;
+	}
+
+	void InputManager::cursorPosCallback(GLFWwindow * _window, double xpos, double ypos)
+	{
+		float offsetX = xpos - lastPosX;
+		float offsetY = ypos - lastPosY;
+
+		if (isCursorCaptured)
+		{
+			for (auto & func : mouseMovementCallbacks)
+			{
+				func(offsetX, offsetY);
+			}
+		}
+
+		lastPosX = xpos;
+		lastPosY = ypos;
+	}
+
+	void InputManager::addMouseMovementCallback(const std::function<void(float, float)> & callback)
+	{
+		mouseMovementCallbacks.push_back(callback);
 	}
 }

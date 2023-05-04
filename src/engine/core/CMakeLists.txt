@@ -6,6 +6,7 @@ set(core_sources
 		Application.cpp ${INCLUDE_DIR}/Application.h
 		MeshResource.cpp ${INCLUDE_DIR}/MeshResource.h
 		GlobalSettings.cpp ${INCLUDE_DIR}/GlobalSettings.h
+		Camera.cpp ${INCLUDE_DIR}/Camera.h
 )
 
 source_group(core FILES ${core_sources})
