@@ -14,21 +14,14 @@ namespace teliod::core
 	{
         static InputManager inputManager;
 
-        //std::bitset<64> input;
+        GLFWwindow * window;
         const unsigned short EnableMask = 0x8000;
         const unsigned short DisableMask = 0x7fff;
         std::unordered_map< std::string, unsigned short > action_mappings;
 
-        void* UpdateCallback( GLFWwindow* _window, int key, int scancode, int action, int mods );
+        bool isHoveringWindow;
 
-<<<<<<< Updated upstream
-=======
-        void MapAction( std::string& action, int key );
-
-        bool isKeyPressed( int key ) const;
-        bool isActionDone( std::string& action ) const;
->>>>>>> Stashed changes
-
+        // void* UpdateCallback( GLFWwindow* _window, int key, int scancode, int action, int mods );
 
         public:
             static InputManager & getInstance();
@@ -38,18 +31,11 @@ namespace teliod::core
             bool isKeyPressed( int key ) const;
             bool isActionDone( std::string& action ) const;
 
-<<<<<<< Updated upstream
-        private:
-            GLFWwindow * window;
+            void captureMouse();
+            void keyCallback(GLFWwindow * _window, int key, int scancode, int action, int mods);
+            void mouseButtonCallback(GLFWwindow * _window, int button, int action, int mods);
+            void mouseEnterCallback(GLFWwindow *_window, int entered);
     };
-=======
-        const unsigned short EnableMask = 0x8000;
-        const unsigned short DisableMask = 0x7fff;
-        std::unordered_map< std::string, unsigned short > action_mappings;
-
-		GLFWwindow * window;
-	};
->>>>>>> Stashed changes
 }
 
 #endif // TELIOD_CORE_INPUTMANAGER_H

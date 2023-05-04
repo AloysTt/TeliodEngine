@@ -4,36 +4,10 @@
 namespace teliod::core
 {
 	InputManager & InputManager::getInstance()
-	{
-		return inputManager;
-	}
-
-    void InputManager::init(GLFWwindow *pWindow)
     {
-        window = pWindow;
-
-        glfwSetKeyCallback( window, UpdateCallback );
+        return inputManager;
     }
 
-<<<<<<< Updated upstream
-    void* InputManager::UpdateCallback( GLFWwindow* _window, int key, int scancode, int action, int mods )
-    {
-        for( auto& ActionKey : action_mappings )
-        {
-            if( key == (ActionKey.second&DisableMask) && action == GLFW_PRESS )
-                ActionKey.second |= EnableMask;
-            else
-                ActionKey.second &= DisableMask;
-        }
-    }
-    
-    void InputManager::MapAction( std::string& action, int key )
-    {
-        if( action.length() == 0 || key == GLFW_KEY_UNKNOWN )
-            return;
-
-        action_mappings[action] = key;
-=======
 	void InputManager::init(GLFWwindow *pWindow)
 	{
 		window = pWindow;
@@ -80,23 +54,7 @@ namespace teliod::core
 		if (glfwRawMouseMotionSupported())
 			glfwSetInputMode(window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
 	}
->>>>>>> Stashed changes
 
-        UpdateCallback( action, key );
-    }
-
-<<<<<<< Updated upstream
-	bool InputManager::isKeyPressed(int key) const
-	{
-		return glfwGetKey( window, key ) == GLFW_PRESS;
-	}
-
-    bool InputManager::isActionDone(std::string& action) const
-    {
-        return action_mappings.at(action)&EnableMask;
-    }
-
-=======
 	void InputManager::keyCallback(GLFWwindow * _window, int key, int scancode, int action, int mods)
     {
         if (key == GLFW_KEY_ESCAPE)
@@ -126,5 +84,4 @@ namespace teliod::core
 	{
 		isHoveringWindow = entered == GLFW_TRUE;
 	}
->>>>>>> Stashed changes
 }
