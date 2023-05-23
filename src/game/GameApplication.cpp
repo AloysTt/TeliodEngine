@@ -84,6 +84,20 @@ void GameApplication::initInternal()
 		core::Camera::getInstance().addYaw(offsetX*cameraSpeed);
 		core::Camera::getInstance().addPitch(-offsetY*cameraSpeed);
 	});
+
+
+	sg::Node * carNode = sg.getRoot()->createChild();
+	ecs::Entity carEnt = carNode->getEntity();
+
+	w.addComponent<core::MeshComponent>(carEnt, core::MeshComponent(core::MeshResourceManager::getInstance().getResource("car")));
+	w.addComponent<render::MeshRenderer>(carEnt,
+										 render::MeshRenderer(
+												 carEnt,
+												 render::ShaderResourceManager::getInstance().getResource("textured"),
+												 render::TextureResourceManager::getInstance().getResource("car")
+												 )
+										 );
+	w.getComponent<sg::Transform>(carEnt).rotate(glm::radians(-90.0f), {1.0f, 0.0f, 0.0f});
 }
 
 void GameApplication::destroyInternal()

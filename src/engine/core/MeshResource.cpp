@@ -52,13 +52,23 @@ namespace teliod::core
 
 			aiMesh * pMesh = scene->mMeshes[0];
 
+			// vertices
 			res->numVertices = pMesh->mNumVertices;
 			res->vertices = new glm::vec3[res->numVertices];
 			std::memcpy(res->vertices, pMesh->mVertices, pMesh->mNumVertices*3*sizeof(float));
 
+			// normals
 			res->normals = new glm::vec3[res->numVertices];
 			std::memcpy(res->normals, pMesh->mNormals, pMesh->mNumVertices*3*sizeof(float));
 
+			// UVs
+			if (pMesh->mTextureCoords[0])
+			{
+				res->uvs = new glm::vec3[res->numVertices];
+				std::memcpy(res->uvs, pMesh->mTextureCoords[0], pMesh->mNumVertices*3*sizeof(float));
+			}
+
+			// triangles
 			res->numTriangles = pMesh->mNumFaces;
 			res->triangles = new unsigned int[pMesh->mNumFaces*3];
 			for (int i=0; i<pMesh->mNumFaces; ++i)
@@ -87,6 +97,9 @@ namespace teliod::core
 
 	MeshResource::MeshResource()
 	: vertices(nullptr)
+	, normals(nullptr)
+	, uvs(nullptr)
+	, triangles(nullptr)
 	{
 	}
 
@@ -96,6 +109,8 @@ namespace teliod::core
 			delete [] vertices;
 		if (normals != nullptr)
 			delete [] normals;
+		if (uvs != nullptr)
+			delete [] uvs;
 		if (triangles != nullptr)
 			delete [] triangles;
 	}
@@ -108,6 +123,11 @@ namespace teliod::core
 	const glm::vec3 * MeshResource::getNormals() const
 	{
 		return normals;
+	}
+
+	const glm::vec3 * MeshResource::getUVs() const
+	{
+		return uvs;
 	}
 
 	int MeshResource::getNumVertices() const

@@ -1,0 +1,5 @@
+---
+name: textured
+stages:
+  vs: "textured_vs.glsl"
+  fs: "textured_fs.glsl"

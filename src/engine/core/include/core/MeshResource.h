@@ -18,6 +18,7 @@ namespace teliod::core
 	public:
 		const glm::vec3 * getVertices() const;
 		const glm::vec3 * getNormals() const;
+		const glm::vec3 * getUVs() const;
 		int getNumVertices() const;
 
 		const unsigned int * getTriangles() const;
@@ -25,6 +26,7 @@ namespace teliod::core
 	private:
 		glm::vec3 * vertices;
 		glm::vec3 * normals;
+		glm::vec3 * uvs;
 		int numVertices;
 
 		unsigned int * triangles;

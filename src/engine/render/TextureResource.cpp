@@ -30,6 +30,8 @@ namespace teliod::render
                 continue;
 
             std::string base_filename = file.path().string().substr(file.path().string().find_last_of("/\\") + 1);
+			int lastDot = base_filename.find_last_of('.');
+			std::string file_without_extension = base_filename.substr(0, lastDot);
             TextureResource * res = new TextureResource();
 
             GLuint texture;
@@ -39,7 +41,9 @@ namespace teliod::render
             int width = 0;
             int height = 0;
             int channels = 3;
-            unsigned char* data = stbi_load(base_filename.c_str(), &width, &height, &channels, 3);
+			stbi_set_flip_vertically_on_load(true);
+            unsigned char* data = stbi_load(file.path().string().c_str(), &width, &height, &channels, 3);
+			stbi_set_flip_vertically_on_load(false);
             if (!data)
             {
                 stbi_image_free(data);
@@ -55,7 +59,7 @@ namespace teliod::render
             res->w = width;
             res->h = height;
 
-            mResources.emplace( base_filename, res );
+            mResources.emplace( file_without_extension, res );
         }
     }
 
@@ -73,7 +77,7 @@ namespace teliod::render
     //
     // Resource
 
-    TextureResource::TextureResource() : rawTex(NULL), mTex(0), w(0), h(0)
+    TextureResource::TextureResource() : rawTex(nullptr), mTex(0), w(0), h(0)
     {}
 
     TextureResource::~TextureResource()

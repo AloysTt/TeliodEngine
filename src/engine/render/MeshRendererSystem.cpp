@@ -27,6 +27,9 @@ namespace teliod::render
 			GLuint view = glGetUniformLocation(shader.getShaderProgram(), "view");
 			GLuint proj = glGetUniformLocation(shader.getShaderProgram(), "proj");
 
+			if (renderer.textureResource != nullptr)
+				glBindTexture(GL_TEXTURE_2D, renderer.textureResource->getMTexture());
+
 			const core::Camera & cam = core::Camera::getInstance();
 			glUniformMatrix4fv(model, 1, GL_FALSE, &tf.getWorldTransform()[0][0]);
 			glUniformMatrix4fv(view, 1, GL_FALSE, &cam.getViewMatrix()[0][0]);
