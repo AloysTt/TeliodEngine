@@ -47,7 +47,7 @@ namespace teliod::core
 		return proj;
 	}
 
-	sg::Transform & Camera::getTransform()
+	sg::Transform & Camera::getTransform() const
 	{
 		return ecs::World::getInstance().getComponent<sg::Transform>(entity);
 	}

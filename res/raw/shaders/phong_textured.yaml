@@ -1,0 +1,5 @@
+---
+name: phong_textured
+stages:
+  vs: "phong_textured_vs.glsl"
+  fs: "phong_textured_fs.glsl"

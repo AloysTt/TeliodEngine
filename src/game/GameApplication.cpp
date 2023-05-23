@@ -93,7 +93,7 @@ void GameApplication::initInternal()
 	w.addComponent<render::MeshRenderer>(carEnt,
 										 render::MeshRenderer(
 												 carEnt,
-												 render::ShaderResourceManager::getInstance().getResource("textured"),
+												 render::ShaderResourceManager::getInstance().getResource("phong_textured"),
 												 render::TextureResourceManager::getInstance().getResource("car")
 												 )
 										 );

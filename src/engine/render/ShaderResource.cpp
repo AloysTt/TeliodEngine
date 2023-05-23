@@ -96,6 +96,7 @@ namespace teliod::render
 			ShaderResource * res = new ShaderResource();
 			mResources.emplace(shaderName, res);
 			res->shaderProgram = programID;
+			res->type = shaderName;
 		}
 	}
 
@@ -151,5 +152,10 @@ namespace teliod::render
 	unsigned int ShaderResource::getShaderProgram() const
 	{
 		return shaderProgram;
+	}
+
+	const std::string & ShaderResource::getType() const
+	{
+		return type;
 	}
 }

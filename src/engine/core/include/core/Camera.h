@@ -35,7 +35,7 @@ namespace teliod::core
 		void addPitch(float _pitch);
 		void addYaw(float _yaw);
 
-		sg::Transform & getTransform();
+		sg::Transform & getTransform() const;
 
 		~Camera() = default;
 	private:

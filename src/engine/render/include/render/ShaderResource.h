@@ -14,8 +14,10 @@ namespace teliod::render
 		DECLARE_RESOURCE(ShaderResource, ShaderResourceManager)
 	public:
 		unsigned int getShaderProgram() const;
+		const std::string & getType() const;
 	private:
 		unsigned int shaderProgram;
+		std::string type;
 	};
 
 	class ShaderResourceManager : public core::ResourceManager<ShaderResource>
