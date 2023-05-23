@@ -36,6 +36,8 @@ namespace teliod::sg
 
 		inline void setRotation(float x, float y, float z);
 		inline void setRotation(const glm::quat & quat);
+		inline void setPosition(float x, float y, float z);
+		inline void setPosition(const glm::vec3 & pos);
 
 	private:
 		glm::vec3 mPosition;

@@ -16,6 +16,7 @@ target_link_libraries(core PUBLIC
 	assimp
 	SceneGraph
 	render
+	physics
 )
 target_include_directories(core PUBLIC
 		include

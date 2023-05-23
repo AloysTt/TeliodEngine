@@ -9,6 +9,7 @@ namespace teliod::core
 		Camera & cam = Camera::getInstance();
 		cam.entity = *getEntities().begin();
 		sg::Transform & tf = ecs::World::getInstance().getComponent<sg::Transform>(cam.entity);
+		auto & test = ecs::World::getInstance().getComponent<core::CameraComponent>(cam.entity);
 
 		glm::vec3 dir;
 		dir.x = cos(glm::radians(cam.yaw)) * cos(glm::radians(cam.pitch));

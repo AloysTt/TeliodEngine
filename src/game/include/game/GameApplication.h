@@ -13,7 +13,7 @@ protected:
 
 	void runInternal(float dt) override;
 private:
-	teliod::ecs::Entity torus;
+	teliod::ecs::Entity cube;
 };
 
 #endif // GAMEAPPLICATION_H

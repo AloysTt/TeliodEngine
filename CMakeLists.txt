@@ -21,6 +21,7 @@ target_link_libraries(game PRIVATE
 		ECS
 		SceneGraph
 		core
+		physics
 )
 target_include_directories(game PRIVATE
 	src/game/include

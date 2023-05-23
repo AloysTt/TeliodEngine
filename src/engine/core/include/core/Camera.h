@@ -25,6 +25,7 @@ namespace teliod::core
 	class Camera
 	{
 		friend class CameraSystem;
+		friend class Application;
 	public:
 		static Camera & getInstance();
 

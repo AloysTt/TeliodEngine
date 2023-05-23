@@ -11,10 +11,13 @@
 #include <chrono>
 #include "core/InputManager.h"
 
+#include <GLFW/glfw3.h>
+
 namespace teliod::core
 {
 	Application::Application()
 	: shouldClose(false)
+	, lastPhysicsFrameTime()
 	{
 	}
 
@@ -33,7 +36,8 @@ namespace teliod::core
 		// core
 		world.registerComponent<core::MeshComponent>();
 		world.registerComponent<core::CameraComponent>();
-		world.registerSystem<core::CameraSystem>();
+		auto * test = world.registerSystem<core::CameraSystem>();
+        core::Camera::getInstance(); // init cam
 		ecs::Signature sCam;
 		sCam.set(world.getComponentType<sg::Transform>());
 		sCam.set(world.getComponentType<core::CameraComponent>());
@@ -42,6 +46,7 @@ namespace teliod::core
 			// create camera
 			ecs::Entity cam = sg::SceneGraph::getInstance().getRoot()->createChild()->getEntity();
 			world.addComponent(cam, core::CameraComponent{});
+            core::Camera::getInstance().entity = cam;
 		}
 
 		// render
@@ -60,9 +65,20 @@ namespace teliod::core
 
 		render::ShaderResourceManager::getInstance(); // init shader resources
 
+		// physics
+
+		world.registerComponent<physics::Rigidbody>();
+
+		world.registerSystem<physics::PhysicsSystem>();
+		ecs::Signature sPhysics;
+		sPhysics.set(world.getComponentType<sg::Transform>());
+		sPhysics.set(world.getComponentType<physics::Rigidbody>());
+		world.setSystemSignature<physics::PhysicsSystem>(sPhysics);
+
 		pMeshRendererSystem = world.getSystem<render::MeshRendererSystem>();
 		pWorldTransformSystem = world.getSystem<sg::systems::WorldTransformSystem>();
 		pCameraSystem = world.getSystem<core::CameraSystem>();
+		pPhysicsSystem = world.getSystem<physics::PhysicsSystem>();
 
 		initInternal();
 	}
@@ -78,7 +94,7 @@ namespace teliod::core
 	void Application::run()
 	{
 		auto& backend = render::RenderBackend::getInstance();
-		auto lastFrame = std::chrono::high_resolution_clock::now();
+		double lastFrame = glfwGetTime();
 		while (!shouldClose && !backend.windowShouldClose())
 		{
 			backend.preFrameUpdate();
@@ -86,10 +102,16 @@ namespace teliod::core
 			pWorldTransformSystem->update();
 			pCameraSystem->update();
 
-			std::chrono::duration<float, std::centi> diff(std::chrono::high_resolution_clock::now() - lastFrame);
-			lastFrame = std::chrono::high_resolution_clock::now();
-			runInternal(diff.count());
+			double diff = glfwGetTime() - lastFrame;
+			lastFrame = glfwGetTime();
+			runInternal(diff*100.0f); // centiseconds
 
+			double diffPhysics = glfwGetTime() - lastPhysicsFrameTime;
+			if (diffPhysics > 1.0f/30.0f)
+			{
+				lastPhysicsFrameTime = glfwGetTime();
+				pPhysicsSystem->update(diffPhysics);
+			}
 			backend.postFrameUpdate();
 		}
 	}

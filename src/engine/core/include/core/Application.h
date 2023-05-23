@@ -1,6 +1,9 @@
 #ifndef TELIOD_CORE_APPLICATION_H
 #define TELIOD_CORE_APPLICATION_H
 
+#include "physics/PhysicsSystem.h"
+#include <chrono>
+
 namespace teliod::render
 {
 	class MeshRendererSystem;
@@ -39,6 +42,9 @@ namespace teliod::core
 		render::MeshRendererSystem * pMeshRendererSystem;
 		sg::systems::WorldTransformSystem * pWorldTransformSystem;
 		core::CameraSystem * pCameraSystem;
+		physics::PhysicsSystem * pPhysicsSystem;
+
+		double lastPhysicsFrameTime;
 	};
 }
 

@@ -15,3 +15,6 @@ target_link_libraries(test_ResManager PRIVATE core)
 
 add_executable(test_ShaderManager test_ShaderManager.cpp)
 target_link_libraries(test_ShaderManager PRIVATE render)
+
+add_executable(test_glm test_glm.cpp)
+target_link_libraries(test_glm PRIVATE glm)

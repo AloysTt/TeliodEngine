@@ -55,7 +55,9 @@ namespace teliod::ecs
 
 		IndexType indexOfRemovedEntity = mEntityToIndexMap[entity];
 		IndexType indexOfLastElement = mSize - 1;
-		mComponentArray[indexOfRemovedEntity] = mComponentArray[indexOfLastElement];
+
+		if (indexOfRemovedEntity != indexOfLastElement)
+			mComponentArray[indexOfRemovedEntity] = mComponentArray[indexOfLastElement];
 
 		Entity entityOfLastElement = mIndexToEntityMap[indexOfLastElement];
 		mEntityToIndexMap[entityOfLastElement] = indexOfRemovedEntity;

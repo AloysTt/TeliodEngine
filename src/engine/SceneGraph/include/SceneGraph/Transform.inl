@@ -109,6 +109,20 @@ namespace teliod::sg
 		updateLocalTransform();
 	}
 
+    inline void Transform::setPosition(float x, float y, float z)
+    {
+        mPosition.x = x;
+        mPosition.y = y;
+        mPosition.z = z;
+
+        updateLocalTransform();
+    }
+
+    inline void Transform::setPosition(const glm::vec3 & pos)
+    {
+        setPosition(pos[0], pos[1], pos[2]);
+    }
+
 	glm::vec3 Transform::getDirection() const
 	{
 		return glm::rotate(getRotation(), glm::vec3(0.0, 0.0, 1.0));
