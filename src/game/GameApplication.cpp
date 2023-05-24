@@ -155,7 +155,7 @@ void GameApplication::initInternal()
 		physics::Rigidbody rb;
 		physics::RigidbodyImplVolume * impl = new physics::RigidbodyImplVolume();
 		rb.setImpl(impl);
-		impl->box.size = {1.0f, 5.0f, 1.0f};
+		impl->box.size = {1.0f, 8.0f, 1.0f};
 		impl->box.position = {0.0f, 10.0f, 15.0f};
 		impl->position = {0.0f, 10.0f, 15.0f};
 		impl->orientation = {0.0f, 0.0f, 0.0f};
@@ -243,22 +243,27 @@ void GameApplication::runInternal(float dt)
 	carDir = tfCar.getDirection();
 	glm::vec3 side = glm::cross(carDir, carUp);
 
-	if (core::InputManager::getInstance().isKeyPressed(GLFW_KEY_UP) && glm::length(pRB->velocity) < 50.0f)
+	if (tfCar.getPosition().y < 2.5f)
 	{
-		pRB->addLinearImpulse(pTF.getDirection()*impulseForce);
+		if (core::InputManager::getInstance().isKeyPressed(GLFW_KEY_UP) && glm::length(pRB->velocity) < 50.0f)
+		{
+			pRB->addLinearImpulse(pTF.getDirection() * impulseForce);
+		}
+		if (core::InputManager::getInstance().isKeyPressed(GLFW_KEY_DOWN) && glm::length(pRB->velocity) < 50.0f)
+		{
+			pRB->addLinearImpulse(-pTF.getDirection() * impulseForce);
+		}
+		if (core::InputManager::getInstance().isKeyPressed(GLFW_KEY_LEFT) && glm::length(pRB->angVel) < 5.0f)
+		{
+			pRB->addRotationalImpulse(pTF.getPosition() + pTF.getDirection(), side*angularImpulseForce*(-1.0f));
+		}
+		if (core::InputManager::getInstance().isKeyPressed(GLFW_KEY_RIGHT) && glm::length(pRB->angVel) < 5.0f)
+		{
+			pRB->addRotationalImpulse(pTF.getPosition() + pTF.getDirection(), side*angularImpulseForce);
+		}
 	}
-	if (core::InputManager::getInstance().isKeyPressed(GLFW_KEY_DOWN) && glm::length(pRB->velocity) < 50.0f)
-	{
-		pRB->addLinearImpulse(-pTF.getDirection()*impulseForce);
-	}
-	if (core::InputManager::getInstance().isKeyPressed(GLFW_KEY_LEFT) && glm::length(pRB->angVel) < 5.0f)
-	{
-		pRB->addRotationalImpulse(pTF.getPosition() + pTF.getDirection(), side*angularImpulseForce*(-1.0f));
-	}
-	if (core::InputManager::getInstance().isKeyPressed(GLFW_KEY_RIGHT) && glm::length(pRB->angVel) < 5.0f)
-	{
-		pRB->addRotationalImpulse(pTF.getPosition() + pTF.getDirection(), side*angularImpulseForce);
-	}
+	ecs::World & w = ecs::World::getInstance();
+	sg::Transform & goalTF = w.getComponent<sg::Transform>(goal);
 
 	if (collided)
 	{
@@ -274,17 +279,17 @@ void GameApplication::runInternal(float dt)
 			std::random_device rd;
 			std::mt19937 gen(rd());
 			std::uniform_real_distribution<> dis(0.0, 50.0);
-			glm::vec3 newPos{dis(gen), 5.0f, dis(gen)};
+			glm::vec3 newPos{dis(gen), 10.0f, dis(gen)};
 
 
 
-			goalTF.setPosition(10.0f, 5.0f, 0.0f);
+			goalTF.setPosition(newPos);
 			goalTF.setRotation({1.0f, 0.0f, 0.0f, 0.0f});
 			{
 				physics::Rigidbody rb;
 				physics::RigidbodyImplVolume * impl = new physics::RigidbodyImplVolume();
 				rb.setImpl(impl);
-				impl->box.size = {1.0f, 5.0f, 1.0f};
+				impl->box.size = {1.0f, 8.0f, 1.0f};
 				impl->box.position = newPos;
 				impl->position = newPos;
 				impl->orientation = {0.0f, 0.0f, 0.0f};

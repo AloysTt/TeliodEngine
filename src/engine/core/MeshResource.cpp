@@ -36,7 +36,7 @@ namespace teliod::core
 
 			if (nullptr == scene)
 			{
-				std::cerr << "File " << file.path().string() << " not recognized as mesh.";
+				std::cerr << "File " << file.path().string() << " not recognized as mesh." << std::endl;
 				continue;
 			}
 

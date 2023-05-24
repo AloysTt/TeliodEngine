@@ -20,7 +20,7 @@ namespace teliod::render
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-		window = glfwCreateWindow(800, 600, "Game", nullptr, nullptr);
+		window = glfwCreateWindow(1920, 1080, "Game", nullptr, nullptr);
 		if (nullptr == window)
 		{
 			glfwTerminate();
