@@ -29,7 +29,7 @@ void GameApplication::initInternal()
 	sg::Node * groundNode = sg.getRoot()->createChild();
 	ecs::Entity ground = groundNode->getEntity();
 	sg::Node * groundNode2 = sg.getRoot()->createChild();
-	ecs::Entity ground2 = groundNode->getEntity();
+	ecs::Entity ground2 = groundNode2->getEntity();
 
 	w.addComponent<core::MeshComponent>(ground, core::MeshComponent(core::MeshResourceManager::getInstance().getResource("ground")));
 	w.addComponent<render::MeshRenderer>(ground, render::MeshRenderer(ground,
@@ -41,7 +41,7 @@ void GameApplication::initInternal()
         physics::Rigidbody rb;
         physics::RigidbodyImplVolume * impl = new physics::RigidbodyImplVolume();
         rb.setImpl(impl);
-        impl->box.size = {1000.0f, 10.0f, 1000.0f};
+        impl->box.size = {1000.0f, 10.5f, 1000.0f};
         impl->box.position = {0.0f, -10.0f, 0.0f};
         impl->position = {0.0f, -10.0f, 0.0f};
         impl->orientation = {0.0f, 0.0f, 0.0f};
