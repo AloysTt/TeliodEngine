@@ -45,7 +45,7 @@ namespace teliod::render
 				GLuint viewPosID = glGetUniformLocation(shader.getShaderProgram(), "viewPos");
 
 				glUniform3f(lightDirID, 0.2f, 1.0f, 0.3f);
-				glUniform3f(lightAmbientID, 0.05f, 0.05f, 0.05f);
+				glUniform3f(lightAmbientID, 0.2f, 0.2f, 0.2f);
 				glUniform3f(lightDiffuseID, 0.4f, 0.4f, 0.4f);
 				glUniform3f(lightSpecularID, 0.5f, 0.5f, 0.5f);
 
