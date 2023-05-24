@@ -102,9 +102,6 @@ namespace teliod::core
 			pWorldTransformSystem->update();
 			pCameraSystem->update();
 
-			double diff = glfwGetTime() - lastFrame;
-			lastFrame = glfwGetTime();
-			runInternal(diff*100.0f); // centiseconds
 
 			double diffPhysics = glfwGetTime() - lastPhysicsFrameTime;
 			if (diffPhysics > 1.0f/30.0f)
@@ -112,6 +109,11 @@ namespace teliod::core
 				lastPhysicsFrameTime = glfwGetTime();
 				pPhysicsSystem->update(diffPhysics);
 			}
+
+			double diff = glfwGetTime() - lastFrame;
+			lastFrame = glfwGetTime();
+			runInternal(diff*100.0f); // centiseconds
+
 			backend.postFrameUpdate();
 		}
 	}

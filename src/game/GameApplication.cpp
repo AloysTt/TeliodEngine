@@ -150,14 +150,14 @@ void GameApplication::initInternal()
 																	  render::ShaderResourceManager::getInstance().getResource("phong_textured"),
 																	  render::TextureResourceManager::getInstance().getResource("blue")
 	));
-	w.getComponent<sg::Transform>(goal).translate(0.0f, 10.0f, 15.0f);
+	w.getComponent<sg::Transform>(goal).translate(0.0f, 12.0f, 15.0f);
 	{
 		physics::Rigidbody rb;
 		physics::RigidbodyImplVolume * impl = new physics::RigidbodyImplVolume();
 		rb.setImpl(impl);
-		impl->box.size = {1.0f, 8.0f, 1.0f};
-		impl->box.position = {0.0f, 10.0f, 15.0f};
-		impl->position = {0.0f, 10.0f, 15.0f};
+		impl->box.size = {1.0f, 10.0f, 1.0f};
+		impl->box.position = {0.0f, 12.0f, 15.0f};
+		impl->position = {0.0f, 12.0f, 15.0f};
 		impl->orientation = {0.0f, 0.0f, 0.0f};
 		impl->mass = 1.0f;
 		w.addComponent<physics::Rigidbody>(goal, std::move(rb));
@@ -246,7 +246,7 @@ void GameApplication::runInternal(float dt)
 	carDir = tfCar.getDirection();
 	glm::vec3 side = glm::cross(carDir, carUp);
 
-	if (tfCar.getPosition().y < 2.5f)
+	if (tfCar.getPosition().y < 2.6f)
 	{
 		if (core::InputManager::getInstance().isKeyPressed(GLFW_KEY_UP) && glm::length(pRB->velocity) < 50.0f)
 		{
@@ -280,7 +280,7 @@ void GameApplication::runInternal(float dt)
 			std::random_device rd;
 			std::mt19937 gen(rd());
 			std::uniform_real_distribution<> dis(0.0, 50.0);
-			glm::vec3 newPos{dis(gen), 10.0f, dis(gen)};
+			glm::vec3 newPos{dis(gen), 12.0f, dis(gen)};
 
 
 
@@ -290,7 +290,7 @@ void GameApplication::runInternal(float dt)
 				physics::Rigidbody rb;
 				physics::RigidbodyImplVolume * impl = new physics::RigidbodyImplVolume();
 				rb.setImpl(impl);
-				impl->box.size = {1.0f, 8.0f, 1.0f};
+				impl->box.size = {1.0f, 10.0f, 1.0f};
 				impl->box.position = newPos;
 				impl->position = newPos;
 				impl->orientation = {0.0f, 0.0f, 0.0f};

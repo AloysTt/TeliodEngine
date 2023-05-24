@@ -7,9 +7,9 @@ namespace teliod::physics
 	: colliders1()
 	, colliders2()
 	, results()
-    , linearProjectionPercent(0.45f)
-    , penetrationSlack(0.05f)
-    , impulseIteration(2)
+    , linearProjectionPercent(0.7f)
+    , penetrationSlack(0.01f)
+    , impulseIteration(8)
 	{
 		colliders1.reserve(100);
 		colliders2.reserve(100);
