@@ -4,6 +4,7 @@
 #include <physics/CollisionManifold.h>
 #include "glm/ext/quaternion_float.hpp"
 #include "glm/gtc/quaternion.hpp"
+#include <cfloat>
 
 namespace teliod::physics
 {

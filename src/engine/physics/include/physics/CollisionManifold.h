@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <glm/vec3.hpp>
+#include <cfloat>
 
 namespace teliod::physics
 {

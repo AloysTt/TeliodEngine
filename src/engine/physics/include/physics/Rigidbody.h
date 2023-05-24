@@ -7,6 +7,7 @@
 #include "glm/ext/matrix_float4x4.hpp"
 #include "glm/gtx/euler_angles.hpp"
 #include "CollisionManifold.h"
+#include <cmath>
 
 namespace teliod::physics
 {
