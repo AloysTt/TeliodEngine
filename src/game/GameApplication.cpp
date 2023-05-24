@@ -159,7 +159,7 @@ void GameApplication::initInternal()
 		impl->box.position = {0.0f, 10.0f, 15.0f};
 		impl->position = {0.0f, 10.0f, 15.0f};
 		impl->orientation = {0.0f, 0.0f, 0.0f};
-		impl->mass = 5.0f;
+		impl->mass = 1.0f;
 		w.addComponent<physics::Rigidbody>(goal, std::move(rb));
 	}
 
@@ -230,14 +230,17 @@ void GameApplication::runInternal(float dt)
 
 	physics::RigidbodyImplVolume * pRB = static_cast<physics::RigidbodyImplVolume *>(ecs::World::getInstance().getComponent<physics::Rigidbody>(car).getImpl());
 	sg::Transform & pTF = ecs::World::getInstance().getComponent<sg::Transform>(car);
-
+	if (fabsf(pRB->orientation.z) > 0.01f)
+		pRB->orientation.z *= 0.8f;
+	if (fabsf(pRB->angVel.z) > 0.01f)
+		pRB->angVel.z *= 0.8f;
 	if (core::InputManager::getInstance().isKeyPressed(GLFW_KEY_E))
 	{
 		pRB->position[1]=15.0f;
 	}
 
-	constexpr float impulseForce = 0.02f;
-	constexpr float angularImpulseForce = 0.1f;
+	constexpr float impulseForce = 0.01f;
+	constexpr float angularImpulseForce = 0.05f;
 
 	glm::vec3 carUp = glm::rotate(tfCar.getRotation(), glm::vec3(0.0, 1.0, 0.0));
 	carDir = tfCar.getDirection();
@@ -262,8 +265,6 @@ void GameApplication::runInternal(float dt)
 			pRB->addRotationalImpulse(pTF.getPosition() + pTF.getDirection(), side*angularImpulseForce);
 		}
 	}
-	ecs::World & w = ecs::World::getInstance();
-	sg::Transform & goalTF = w.getComponent<sg::Transform>(goal);
 
 	if (collided)
 	{
@@ -293,7 +294,7 @@ void GameApplication::runInternal(float dt)
 				impl->box.position = newPos;
 				impl->position = newPos;
 				impl->orientation = {0.0f, 0.0f, 0.0f};
-				impl->mass = 5.0f;
+				impl->mass = 1.0f;
 				w.addComponent<physics::Rigidbody>(goal, std::move(rb));
 			}
 			++score;
