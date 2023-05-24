@@ -5,7 +5,6 @@ set(physics_sources
 		${INCLUDE_DIR}/CollisionManifold.h
 		${INCLUDE_DIR}/Geometry.h ${INCLUDE_DIR}/Geometry.inl Geometry.cpp
 )
-
 source_group(physics FILES ${physics_sources})
 add_library(physics STATIC ${physics_sources})
 target_include_directories(physics PUBLIC
@@ -16,3 +15,4 @@ target_link_libraries(physics PRIVATE
 		glm
 		SceneGraph
 )
+target_compile_definitions(physics PUBLIC DYNAMIC_FRICTION)

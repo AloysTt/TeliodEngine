@@ -105,15 +105,15 @@ namespace teliod::physics
 		if (CMP(jt, 0.0f))
 			return;
 
-		glm::vec3 tangentImpuse;
+		glm::vec3 tangentImpulse;
 #ifdef DYNAMIC_FRICTION
 		float sf = sqrtf(A.staticFriction * B.staticFriction);
 	float df = sqrtf(A.dynamicFriction * B.dynamicFriction);
 	if (fabsf(jt) < j * sf) {
-		tangentImpuse = t * jt;
+		tangentImpulse = t * jt;
 	}
 	else {
-		tangentImpuse = t * -j * df;
+		tangentImpulse = t * -j * df;
 	}
 #else
 		float friction = sqrtf(A.friction * B.friction);
@@ -123,13 +123,13 @@ namespace teliod::physics
 		else if (jt < -j * friction) {
 			jt = -j * friction;
 		}
-		tangentImpuse = t * jt;
+		tangentImpulse = t * jt;
 #endif
 
-		A.velocity = A.velocity - tangentImpuse *  invMass1;
-		B.velocity = B.velocity + tangentImpuse *  invMass2;
+		A.velocity = A.velocity - tangentImpulse * invMass1;
+		B.velocity = B.velocity + tangentImpulse * invMass2;
 
-		A.angVel = A.angVel - glm::vec3(glm::vec4(glm::cross(r1, tangentImpuse), 0.0f) * i1);
-		B.angVel = B.angVel + glm::vec3(glm::vec4(glm::cross(r2, tangentImpuse), 0.0f) * i2);
+		A.angVel = A.angVel - glm::vec3(glm::vec4(glm::cross(r1, tangentImpulse), 0.0f) * i1);
+		B.angVel = B.angVel + glm::vec3(glm::vec4(glm::cross(r2, tangentImpulse), 0.0f) * i2);
 	}
 }

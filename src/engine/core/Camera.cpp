@@ -30,7 +30,7 @@ namespace teliod::core
 
 	Camera::Camera()
 	: view(1.0f)
-	, proj(glm::perspective(45.0f, 800.0f/600.0f, 0.1f, 100.0f))
+	, proj(glm::perspective(45.0f, 800.0f/600.0f, 0.1f, 1000.0f))
 	, entity(0)
 	, pitch(0)
 	, yaw(0)
@@ -61,6 +61,19 @@ namespace teliod::core
 	void Camera::addYaw(float _yaw)
 	{
 		yaw+=_yaw;
+		if (yaw < 0.0f) yaw +=360.0f;
+		if (yaw > 360.0f) yaw -=360.0f;
+	}
+
+	void Camera::setPitch(float _pitch)
+	{
+		pitch =_pitch;
+		pitch = glm::clamp(pitch, -90.0f+EPSILON, 90.0f-EPSILON);
+	}
+
+	void Camera::setYaw(float _yaw)
+	{
+		yaw = _yaw;
 		if (yaw < 0.0f) yaw +=360.0f;
 		if (yaw > 360.0f) yaw -=360.0f;
 	}

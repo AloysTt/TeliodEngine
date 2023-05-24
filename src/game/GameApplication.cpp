@@ -11,6 +11,7 @@
 #include <core/Components.h>
 #include <physics/Rigidbody.h>
 #include <iostream>
+#include <cmath>
 
 # define EPSILON 0.001f
 
@@ -27,22 +28,25 @@ void GameApplication::initInternal()
 
 	sg::Node * groundNode = sg.getRoot()->createChild();
 	ecs::Entity ground = groundNode->getEntity();
+	sg::Node * groundNode2 = sg.getRoot()->createChild();
+	ecs::Entity ground2 = groundNode->getEntity();
+
 	w.addComponent<core::MeshComponent>(ground, core::MeshComponent(core::MeshResourceManager::getInstance().getResource("ground")));
 	w.addComponent<render::MeshRenderer>(ground, render::MeshRenderer(ground,
 																	  render::ShaderResourceManager::getInstance().getResource("phong_textured"),
 																	  render::TextureResourceManager::getInstance().getResource("concrete")
 																	  ));
-	w.getComponent<sg::Transform>(ground).translate(0.0f, 0.0f, 0.0f);
+	w.getComponent<sg::Transform>(ground2).translate(0.0f, -10.0f, 0.0f);
 	{
         physics::Rigidbody rb;
         physics::RigidbodyImplVolume * impl = new physics::RigidbodyImplVolume();
         rb.setImpl(impl);
-        impl->box.size = {100.0f, 0.5f, 100.0f};
-        impl->box.position = {0.0f, 0.0f, 0.0f};
-        impl->position = {0.0f, 0.0f, 0.0f};
+        impl->box.size = {1000.0f, 10.0f, 1000.0f};
+        impl->box.position = {0.0f, -10.0f, 0.0f};
+        impl->position = {0.0f, -10.0f, 0.0f};
         impl->orientation = {0.0f, 0.0f, 0.0f};
 		impl->mass = 0.0f;
-        w.addComponent<physics::Rigidbody>(ground, std::move(rb));
+        w.addComponent<physics::Rigidbody>(ground2, std::move(rb));
     }
 
 //	sg::Node * cubeNode = sg.getRoot()->createChild();
@@ -123,11 +127,11 @@ void GameApplication::initInternal()
 		physics::Rigidbody rb;
 		physics::RigidbodyImplVolume * impl = new physics::RigidbodyImplVolume();
 		rb.setImpl(impl);
-		impl->box.size = {2.5f, 2.0f, 5.0f};
+		impl->box.size = {4.5f, 2.0f, 5.0f};
 		impl->box.position = {0.0f, 10.0f, 0.0f};
 		impl->position = {0.0f, 10.0f, 0.0f};
 		impl->orientation = {0.0f, 0.0f, 0.0f};
-		impl->mass = 50.0f;
+		impl->mass = 5.0f;
 		w.addComponent<physics::Rigidbody>(car, std::move(rb));
 	}
 }
@@ -141,32 +145,50 @@ void GameApplication::runInternal(float dt)
 {
 //	ecs::World::getInstance().getComponent<sg::Transform>(cube).rotate(glm::radians(1.0f) * dt, {0.0f, 1.0f, 0.0f});
 
-	sg::Transform & tf = core::Camera::getInstance().getTransform();
-	glm::vec3 camDir{tf.getDirection()};
+	core::Camera & camera = core::Camera::getInstance();
+	sg::Transform & tfCam = camera.getTransform();
+	sg::Transform & tfCar = ecs::World::getInstance().getComponent<sg::Transform>(car);
+	glm::vec3 camDir{tfCam.getDirection()};
 	glm::vec3 inputDir{0.0f, 0.0f, 0.0f};
 
-	constexpr float cameraSpeed = 0.2f;
-	glm::vec3 camRight = glm::normalize(glm::cross(camDir, {0.0f, 1.0f, 0.0f}));
+//	constexpr float cameraSpeed = 0.2f;
+//	glm::vec3 camRight = glm::normalize(glm::cross(camDir, {0.0f, 1.0f, 0.0f}));
+//
+//	if (core::InputManager::getInstance().isKeyPressed(GLFW_KEY_W))
+//	{
+//		inputDir+=camDir;
+//	}
+//	if (core::InputManager::getInstance().isKeyPressed(GLFW_KEY_S))
+//	{
+//		inputDir-=camDir;
+//	}
+//	if (core::InputManager::getInstance().isKeyPressed(GLFW_KEY_D))
+//	{
+//		inputDir+=camRight;
+//	}
+//	if (core::InputManager::getInstance().isKeyPressed(GLFW_KEY_A))
+//	{
+//		inputDir-=camRight;
+//	}
+//
+//	if (inputDir.x != 0.0f || inputDir.y != 0.0f || inputDir.z != 0.0f)
+//		tf.translate(glm::normalize(inputDir)*dt*cameraSpeed);
 
-	if (core::InputManager::getInstance().isKeyPressed(GLFW_KEY_W))
-	{
-		inputDir+=camDir;
-	}
-	if (core::InputManager::getInstance().isKeyPressed(GLFW_KEY_S))
-	{
-		inputDir-=camDir;
-	}
-	if (core::InputManager::getInstance().isKeyPressed(GLFW_KEY_D))
-	{
-		inputDir+=camRight;
-	}
-	if (core::InputManager::getInstance().isKeyPressed(GLFW_KEY_A))
-	{
-		inputDir-=camRight;
-	}
+	glm::vec3 carDir = tfCar.getDirection();
+	carDir.y = 0.0f;
+	carDir = glm::normalize(carDir);
 
-	if (inputDir.x != 0.0f || inputDir.y != 0.0f || inputDir.z != 0.0f)
-		tf.translate(glm::normalize(inputDir)*dt*cameraSpeed);
+	glm::vec3 newPos{tfCar.getPosition()};
+	newPos-=carDir*15.0f;
+	newPos.y+= 5.0f;
+	tfCam.setPosition(newPos);
+	glm::vec3 dir = glm::normalize(tfCar.getPosition()-newPos);
+	camera.setYaw(glm::degrees(atan2(dir.z, dir.x)));
+	camera.setPitch(glm::degrees(atan2(dir.y, sqrt(dir.x * dir.x + dir.z * dir.z))));
+	// glm::quatLookAtLH(()
+//	tfCam.setRotation(, {0.0f, 1.0f, 0.0f}));
+
+
 
 	physics::RigidbodyImplVolume * pRB = static_cast<physics::RigidbodyImplVolume *>(ecs::World::getInstance().getComponent<physics::Rigidbody>(car).getImpl());
 	sg::Transform & pTF = ecs::World::getInstance().getComponent<sg::Transform>(car);
@@ -177,22 +199,26 @@ void GameApplication::runInternal(float dt)
 	}
 
 	constexpr float impulseForce = 1.0f;
-	constexpr float angularImpulseForce = 1.0f;
+	constexpr float angularImpulseForce = 0.1f;
 
-	if (core::InputManager::getInstance().isKeyPressed(GLFW_KEY_UP) && glm::length2(pRB->velocity) < 150.0f)
+	glm::vec3 carUp = glm::rotate(tfCar.getRotation(), glm::vec3(0.0, 1.0, 0.0));
+	carDir = tfCar.getDirection();
+	glm::vec3 side = glm::cross(carDir, carUp);
+
+	if (core::InputManager::getInstance().isKeyPressed(GLFW_KEY_UP) && glm::length(pRB->velocity) < 50.0f)
 	{
 		pRB->addLinearImpulse(pTF.getDirection()*impulseForce);
 	}
-	if (core::InputManager::getInstance().isKeyPressed(GLFW_KEY_DOWN) && glm::length2(pRB->velocity) < 150.0f)
+	if (core::InputManager::getInstance().isKeyPressed(GLFW_KEY_DOWN) && glm::length(pRB->velocity) < 50.0f)
 	{
 		pRB->addLinearImpulse(-pTF.getDirection()*impulseForce);
 	}
-	if (core::InputManager::getInstance().isKeyPressed(GLFW_KEY_LEFT) && glm::length2(pRB->angVel) < 100.0f)
+	if (core::InputManager::getInstance().isKeyPressed(GLFW_KEY_LEFT) && glm::length(pRB->angVel) < 10.0f)
 	{
-		pRB->addRotationalImpulse(pTF.getPosition() + pTF.getDirection(), glm::cross(pTF.getDirection(), {0.0f, 1.0f, 0.0f})*angularImpulseForce*(-1.0f));
+		pRB->addRotationalImpulse(pTF.getPosition() + pTF.getDirection(), side*angularImpulseForce*(-1.0f));
 	}
-	if (core::InputManager::getInstance().isKeyPressed(GLFW_KEY_RIGHT) && glm::length2(pRB->angVel) < 100.0f)
+	if (core::InputManager::getInstance().isKeyPressed(GLFW_KEY_RIGHT) && glm::length(pRB->angVel) < 10.0f)
 	{
-		pRB->addRotationalImpulse(pTF.getPosition() + pTF.getDirection(), glm::cross(pTF.getDirection(), {0.0f, 1.0f, 0.0f})*angularImpulseForce);
+		pRB->addRotationalImpulse(pTF.getPosition() + pTF.getDirection(), side*angularImpulseForce);
 	}
 }

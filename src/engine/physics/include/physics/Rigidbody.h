@@ -138,7 +138,7 @@ namespace teliod::physics
 		, mass(1.0f)
 #ifdef DYNAMIC_FRICTION
 		, staticFriction(0.5f)
-		, dynamicFriction(0.3f)
+		, dynamicFriction(0.1f)
 #else
 		, friction(0.6f)
 #endif
@@ -151,7 +151,7 @@ namespace teliod::physics
         , mass(1.0f)
 #ifdef DYNAMIC_FRICTION
         , staticFriction(0.5f)
-		, dynamicFriction(0.3f)
+		, dynamicFriction(0.1f)
 #else
         , friction(0.6f)
 #endif
@@ -185,7 +185,12 @@ namespace teliod::physics
 
             pNew->mass = mass;
             pNew->cor = cor;
-            pNew->friction = friction;
+#ifdef DYNAMIC_FRICTION
+			pNew->staticFriction = staticFriction;
+			pNew->dynamicFriction = dynamicFriction;
+#else
+			pNew->friction = friction;
+#endif
 
             pNew->box = box;
             pNew->sphere = sphere;
@@ -206,7 +211,7 @@ namespace teliod::physics
 		float cor; // Coefficient of restitution
 #ifdef DYNAMIC_FRICTION
 		float staticFriction;
-	float dynamicFriction;
+		float dynamicFriction;
 #else
 		float friction;
 #endif
