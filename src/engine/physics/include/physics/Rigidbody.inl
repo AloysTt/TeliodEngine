@@ -14,11 +14,11 @@ namespace teliod::physics
         velocity = velocity + acceleration * dt;
         velocity = velocity * damping;
 
-        if (std::fabsf(velocity.x) < 0.001f)
+        if (fabsf(velocity.x) < 0.001f)
             velocity.x = 0.0f;
-        if (std::fabsf(velocity.y) < 0.001f)
+        if (fabsf(velocity.y) < 0.001f)
             velocity.y = 0.0f;
-        if (std::fabsf(velocity.z) < 0.001f)
+        if (fabsf(velocity.z) < 0.001f)
             velocity.z = 0.0f;
 
         if (getType() == RigidbodyType::BOX)
@@ -27,11 +27,11 @@ namespace teliod::physics
             angVel = angVel + angAccel * dt;
             angVel = angVel *  damping;
 
-            if (std::fabsf(angVel.x) < 0.001f)
+            if (fabsf(angVel.x) < 0.001f)
                 angVel.x = 0.0f;
-            if (std::fabsf(angVel.y) < 0.001f)
+            if (fabsf(angVel.y) < 0.001f)
                 angVel.y = 0.0f;
-            if (std::fabsf(angVel.z) < 0.001f)
+            if (fabsf(angVel.z) < 0.001f)
                 angVel.z = 0.0f;
         }
 

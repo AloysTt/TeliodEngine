@@ -233,7 +233,7 @@ namespace teliod::physics
 
 		result.colliding = true;
 		result.normal = d;
-		result.depth = std::fabsf(glm::length(d) - r) * 0.5f;
+		result.depth = fabsf(glm::length(d) - r) * 0.5f;
 
 		// dtp - Distance to intersection point
 		float dtp = A.radius - result.depth;
