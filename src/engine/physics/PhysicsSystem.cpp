@@ -25,11 +25,13 @@ namespace teliod::physics
 		ecs::World & w = ecs::World::getInstance();
 		std::vector<Rigidbody *> bodies;
 		std::vector<sg::Transform *> transforms;
+		std::vector<ecs::Entity> entities;
 		bodies.reserve(getEntities().size());
 		for (ecs::Entity e : getEntities())
         {
 			bodies.push_back(&w.getComponent<Rigidbody>(e));
 			transforms.push_back(&w.getComponent<sg::Transform>(e));
+			entities.push_back(e);
         }
 
 		{
@@ -53,6 +55,10 @@ namespace teliod::physics
 					{
 						colliders1.push_back(bodies[i]);
 						colliders2.push_back(bodies[j]);
+						if (callbacks.contains(entities[i]))
+							callbacks[entities[i]](entities[j]);
+						if (callbacks.contains(entities[j]))
+							callbacks[entities[j]](entities[i]);
 						results.push_back(result);
 					}
 				}
@@ -130,4 +136,9 @@ namespace teliod::physics
             }
         }
     }
+
+	void PhysicsSystem::addCallback(ecs::Entity ent, const std::function<void(ecs::Entity)>& callback)
+	{
+		callbacks.insert({ent, callback});
+	}
 }

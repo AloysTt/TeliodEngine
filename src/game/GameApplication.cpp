@@ -12,6 +12,7 @@
 #include <physics/Rigidbody.h>
 #include <iostream>
 #include <cmath>
+#include <random>
 
 # define EPSILON 0.001f
 
@@ -23,6 +24,10 @@ namespace physics = teliod::physics;
 
 void GameApplication::initInternal()
 {
+	collided = false;
+	timeSinceCollided = 0.0f;
+	score = 0;
+
 	ecs::World & w = ecs::World::getInstance();
 	sg::SceneGraph& sg = sg::SceneGraph::getInstance();
 
@@ -101,14 +106,14 @@ void GameApplication::initInternal()
 //    core::Camera::getInstance().getTransform().setPosition({-6.0f, 5.0f, 1.0f});
 
 	// camera
-	core::InputManager::getInstance().addMouseMovementCallback([](float offsetX, float offsetY)
-	{
-		sg::Transform & tf = core::Camera::getInstance().getTransform();
-		constexpr float cameraSpeed = 0.05f;
-
-		core::Camera::getInstance().addYaw(offsetX*cameraSpeed);
-		core::Camera::getInstance().addPitch(-offsetY*cameraSpeed);
-	});
+//	core::InputManager::getInstance().addMouseMovementCallback([](float offsetX, float offsetY)
+//	{
+//		sg::Transform & tf = core::Camera::getInstance().getTransform();
+//		constexpr float cameraSpeed = 0.05f;
+//
+//		core::Camera::getInstance().addYaw(offsetX*cameraSpeed);
+//		core::Camera::getInstance().addPitch(-offsetY*cameraSpeed);
+//	});
 
 
 	sg::Node * carNode = sg.getRoot()->createChild();
@@ -134,6 +139,37 @@ void GameApplication::initInternal()
 		impl->mass = 5.0f;
 		w.addComponent<physics::Rigidbody>(car, std::move(rb));
 	}
+
+	// goal
+	sg::Node * goalNode = sg.getRoot()->createChild();
+	goal = goalNode->getEntity();
+
+
+	w.addComponent<core::MeshComponent>(goal, core::MeshComponent(core::MeshResourceManager::getInstance().getResource("tower")));
+	w.addComponent<render::MeshRenderer>(goal, render::MeshRenderer(goal,
+																	  render::ShaderResourceManager::getInstance().getResource("phong_textured"),
+																	  render::TextureResourceManager::getInstance().getResource("blue")
+	));
+	w.getComponent<sg::Transform>(goal).translate(0.0f, 10.0f, 15.0f);
+	{
+		physics::Rigidbody rb;
+		physics::RigidbodyImplVolume * impl = new physics::RigidbodyImplVolume();
+		rb.setImpl(impl);
+		impl->box.size = {1.0f, 5.0f, 1.0f};
+		impl->box.position = {0.0f, 10.0f, 15.0f};
+		impl->position = {0.0f, 10.0f, 15.0f};
+		impl->orientation = {0.0f, 0.0f, 0.0f};
+		impl->mass = 5.0f;
+		w.addComponent<physics::Rigidbody>(goal, std::move(rb));
+	}
+
+	ecs::Entity tmp = goal;
+	w.getSystem<physics::PhysicsSystem>()->addCallback(car, [this, tmp](ecs::Entity ent){
+		if (!collided && ent == tmp)
+		{
+			collided = true;
+		}
+	});
 }
 
 void GameApplication::destroyInternal()
@@ -200,7 +236,7 @@ void GameApplication::runInternal(float dt)
 		pRB->position[1]=15.0f;
 	}
 
-	constexpr float impulseForce = 1.0f;
+	constexpr float impulseForce = 0.02f;
 	constexpr float angularImpulseForce = 0.1f;
 
 	glm::vec3 carUp = glm::rotate(tfCar.getRotation(), glm::vec3(0.0, 1.0, 0.0));
@@ -215,12 +251,48 @@ void GameApplication::runInternal(float dt)
 	{
 		pRB->addLinearImpulse(-pTF.getDirection()*impulseForce);
 	}
-	if (core::InputManager::getInstance().isKeyPressed(GLFW_KEY_LEFT) && glm::length(pRB->angVel) < 10.0f)
+	if (core::InputManager::getInstance().isKeyPressed(GLFW_KEY_LEFT) && glm::length(pRB->angVel) < 5.0f)
 	{
 		pRB->addRotationalImpulse(pTF.getPosition() + pTF.getDirection(), side*angularImpulseForce*(-1.0f));
 	}
-	if (core::InputManager::getInstance().isKeyPressed(GLFW_KEY_RIGHT) && glm::length(pRB->angVel) < 10.0f)
+	if (core::InputManager::getInstance().isKeyPressed(GLFW_KEY_RIGHT) && glm::length(pRB->angVel) < 5.0f)
 	{
 		pRB->addRotationalImpulse(pTF.getPosition() + pTF.getDirection(), side*angularImpulseForce);
+	}
+
+	if (collided)
+	{
+		timeSinceCollided+=dt;
+		if (timeSinceCollided > 200.0f)
+		{
+			ecs::World & w = ecs::World::getInstance();
+			collided = false;
+			timeSinceCollided = 0.0f;
+			w.removeComponent<physics::Rigidbody>(goal);
+			sg::Transform & goalTF = w.getComponent<sg::Transform>(goal);
+
+			std::random_device rd;
+			std::mt19937 gen(rd());
+			std::uniform_real_distribution<> dis(0.0, 50.0);
+			glm::vec3 newPos{dis(gen), 5.0f, dis(gen)};
+
+
+
+			goalTF.setPosition(10.0f, 5.0f, 0.0f);
+			goalTF.setRotation({1.0f, 0.0f, 0.0f, 0.0f});
+			{
+				physics::Rigidbody rb;
+				physics::RigidbodyImplVolume * impl = new physics::RigidbodyImplVolume();
+				rb.setImpl(impl);
+				impl->box.size = {1.0f, 5.0f, 1.0f};
+				impl->box.position = newPos;
+				impl->position = newPos;
+				impl->orientation = {0.0f, 0.0f, 0.0f};
+				impl->mass = 5.0f;
+				w.addComponent<physics::Rigidbody>(goal, std::move(rb));
+			}
+			++score;
+			std::cout << "Score : " << score << std::endl;
+		}
 	}
 }

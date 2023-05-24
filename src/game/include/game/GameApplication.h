@@ -14,6 +14,10 @@ protected:
 	void runInternal(float dt) override;
 private:
 	teliod::ecs::Entity car;
+	teliod::ecs::Entity goal;
+	bool collided;
+	float timeSinceCollided;
+	int score;
 };
 
 #endif // GAMEAPPLICATION_H
