@@ -182,7 +182,9 @@ void GameApplication::runInternal(float dt)
 	newPos-=carDir*15.0f;
 	newPos.y+= 5.0f;
 	tfCam.setPosition(newPos);
-	glm::vec3 dir = glm::normalize(tfCar.getPosition()-newPos);
+	glm::vec3 camTarget = tfCar.getPosition();
+	camTarget.y += 1.0f;
+	glm::vec3 dir = glm::normalize(camTarget-newPos);
 	camera.setYaw(glm::degrees(atan2(dir.z, dir.x)));
 	camera.setPitch(glm::degrees(atan2(dir.y, sqrt(dir.x * dir.x + dir.z * dir.z))));
 	// glm::quatLookAtLH(()
